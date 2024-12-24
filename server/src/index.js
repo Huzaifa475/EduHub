@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import app from './app.js';
 import {Server} from 'socket.io';
 import {createServer} from 'http';
-import { connect } from 'http2';
 
 dotenv.config({
     path: './.env'

@@ -14,13 +14,21 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    password: {
-        type: String,
-        required: true
-    },
     isGoogleUser: {
         type: Boolean,
         default: false
+    },
+    googleId: {
+        type: String,
+        required: function() {
+            return this.isGoogleUser;
+        }
+    },
+    password: {
+        type: String,
+        required: function(){
+            return !this.isGoogleUser
+        }
     },
     rooms: [{
         type: mongoose.Schema.Types.ObjectId,

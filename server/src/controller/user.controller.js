@@ -2,10 +2,12 @@ import {User} from '../model/user.model.js';
 import apiResponse from '../util/apiResponse.js';
 import apiError from '../util/apiError.js';
 import asyncHandler from '../util/asyncHandler.js';
+import { sendMail } from '../util/nodeMailer.js';
+import crypto from 'crypto';
 
 const generateAccessRefreshToken = async (userId) => {
     try {
-        const user = await User.findById(user)
+        const user = await User.findById(userId)
 
         const accessToken = await user.generateAccessToken()
 
@@ -84,6 +86,129 @@ const login = asyncHandler(async(req, res) => {
     .json(new apiResponse(200, {user: loggedInUser, refreshToken, accessToken}, "User logged In successfully"))
 })
 
+const logout = asyncHandler(async(req, res) => {
 
+    await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $unset: {
+                refreshToken: true
+            }
+        },
+        {
+            new: true
+        }
+    )
 
-export {register, login}
+    const options = {
+        httpOnly: true,
+        secure: true,
+    }
+
+    return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new apiResponse(200, "User logged out successfully"))
+})
+
+const updateData = asyncHandler(async(req, res) => {
+
+    const {userName, email} = req.body
+
+    const updateFields = {}
+
+    if(userName) updateFields.userName = userName
+    if(email) updateFields.email = email
+
+    const user = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set: {
+                ...updateFields
+            }
+        },
+        {
+            new: true
+        }
+    )
+
+    return res
+    .status(200)
+    .json(new apiResponse(200, "User data updated successFully"))
+})
+
+const getCurrentUser = asyncHandler(async(req, res) => {
+
+    const user = await User.findById(req.user._id).select("-password -refreshToken")
+
+    return res
+    .status(200)
+    .json(new apiResponse(200, user, "Current user fetch successfully"))
+})
+
+const forgotPassword = asyncHandler(async(req, res) => {
+
+    const {email} = req.body
+
+    if(!email){
+        throw new apiError(400, "Please provide the email")
+    }
+
+    const user = await User.findOne({email})
+
+    const resetToken = await user.createResetPasswordToken()
+
+    await user.save({validateBeforeSave: false})
+
+    const resetUrl = `${req.protocol}://localhost:3000/api/v1/users/reset-password/${resetToken}`
+
+    const message = `We have received a password reset request. Please use the below link to reset the password.\n\n${resetUrl}\n\nThis reset password link is valid only for 10 minutes.`
+    try {
+        await sendMail({
+            email: user.email,
+            subject: 'Password change request from EduHub',
+            message: message
+        })
+    } catch (error) {
+        user.passwordResetToken = undefined
+        user.passwordResetTokenExpiry = undefined
+
+        await user.save({validateBeforeSave: false})
+
+        throw new apiError(500, 'Something went wrong while sending the email.')
+    }
+})
+
+const resetPassword = asyncHandler(async(req, res) => {
+
+    const {password, confirmPassword} = req.body
+
+    if(!password || !confirmPassword){
+        throw new apiError(402, "All fields are required")
+    }
+
+    const passwordResetToken = crypto.createHash('sha256').update(req.params.token).digest('hex')
+
+    const user = await User.findOne({passwordResetToken, passwordResetTokenExpiry: {$gt: Date.now()}}).select("-password -refreshToken")
+
+    if(!user){
+        throw new apiError(402, "Tokens are invalid or expired")
+    }
+
+    if(req.body.password !== req.body.confirmPassword){
+        throw new apiError(406, "Please enter the correct password")
+    }
+
+    user.password = password
+    user.passwordResetToken = undefined
+    user.passwordResetTokenExpiry = undefined
+
+    await user.save({validateBeforeSave: true})
+
+    return res
+    .status(200)
+    .json(new apiResponse(200, user, "Password changed successfully"))
+})
+
+export {register, login, logout, updateData, getCurrentUser, generateAccessRefreshToken, forgotPassword, resetPassword}

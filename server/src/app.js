@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import apiError from './util/apiError.js';
+import passport from './config/passport-google.js';
+import session from "express-session";
 
 const app = express();
 
@@ -17,7 +20,24 @@ app.use(express.static('public'));
 
 app.use(cookieParser());
 
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}))
 
+app.use(passport.initialize());
+
+app.use(passport.session());
+
+import userRouter from "./route/user.route.js";
+
+app.use("/api/v1/users", userRouter);
+
+app.use((req, res, next) => {
+    const error = new apiError(404, "Error Occured");
+    next(error);
+});
 
 app.use((err, req, res, next) => {
     const statusCode = err.status || 500
