@@ -3,10 +3,26 @@ import dotenv from 'dotenv';
 import app from './app.js';
 import {Server} from 'socket.io';
 import {createServer} from 'http';
+import { createClient } from 'redis';
 
 dotenv.config({
     path: './.env'
 })
+
+const client = createClient({
+    username: 'default',
+    password: 'dymjurgAtbevW5bJuTfe90DgfTrUZJCa',
+    socket: {
+        host: 'redis-13100.crce178.ap-east-1-1.ec2.redns.redis-cloud.com',
+        port: 13100
+    }
+});
+
+client.on('error', err => console.log('Redis Client Error', err));
+await client.connect();
+await client.set('foo', 'bar');
+const result = await client.get('foo');
+console.log(result)
 
 const server = createServer(app);
 
