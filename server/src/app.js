@@ -34,11 +34,13 @@ import userRouter from "./route/user.route.js";
 import roomRouter from "./route/room.route.js";
 import notificationRouter from "./route/notification.route.js";
 import fileRouter from "./route/file.route.js";
+import taskRouter from "./route/task.route.js";
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/rooms", roomRouter);
 app.use("/api/v1/notifications", notificationRouter);
 app.use("/api/v1/files", fileRouter);
+app.use("/api/v1/tasks", taskRouter);
 
 // app.use((req, res, next) => {
 //     const error = new apiError(404, "Error Occured");

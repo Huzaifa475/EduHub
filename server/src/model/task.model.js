@@ -13,16 +13,16 @@ const taskSchema = new mongoose.Schema({
         taskName: {
             type: String,
             required: true
-        },
-        isCompleted: {
-            type: Boolean,
-            default: false
         }
     }],
+    isCompleted: {
+        type: Boolean,
+        default: false
+    },
     room: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Room'
     }
-}, {timestamps: true});
+}, { timestamps: true });
 
 export const Task = mongoose.model('Task', taskSchema);
