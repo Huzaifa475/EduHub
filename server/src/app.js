@@ -31,8 +31,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 import userRouter from "./route/user.route.js";
+import roomRouter from "./route/room.route.js";
+import notificationRouter from "./route/notification.route.js";
 
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/rooms", roomRouter);
+app.use("/api/v1/notifications", notificationRouter);
 
 app.use((req, res, next) => {
     const error = new apiError(404, "Error Occured");

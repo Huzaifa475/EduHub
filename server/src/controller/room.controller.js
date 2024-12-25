@@ -1,8 +1,9 @@
 import { Room } from "../model/room.model.js";
 import asyncHandler from "../util/asyncHandler.js";
 import apiError from "../util/apiError.js";
-import apiResponse from "../util/apiResponse";
+import apiResponse from "../util/apiResponse.js";
 import { Message } from "../model/message.model.js";
+import { Notification } from "../model/notification.model.js";
 import { Task } from "../model/task.model.js";
 import { File } from "../model/file.model.js";
 import { User } from "../model/user.model.js";
@@ -172,8 +173,8 @@ const removeAMember = asyncHandler(async(req, res) => {
     await Room.findByIdAndUpdate(
         roomId, 
         {
-            members: {
-                $pull: {members: memberId}
+            $pull: {
+                members: memberId
             }
         },
         {
