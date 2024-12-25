@@ -3,11 +3,11 @@ import { createClient } from "redis";
 const connectRedis = async() => {
     try {
         const client = createClient({
-            username: 'default',
-            password: 'dymjurgAtbevW5bJuTfe90DgfTrUZJCa',
+            username: process.env.REDIS_USERNAME,
+            password: process.env.REDIS_PASSWORD,
             socket: {
-                host: 'redis-13100.crce178.ap-east-1-1.ec2.redns.redis-cloud.com',
-                port: 13100
+                host: process.env.REDIS_HOST,
+                port: process.env.REDIS_PORT
             }
         })
 
