@@ -4,89 +4,7 @@ import app from './app.js';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 import setupChat from './service/chat.service.js';
-// import setVideoCall, { createWorker } from './service/videoCall.service.js';
-import mediasoup from "mediasoup";
-import { createClient } from "redis";
-
-const client = createClient({
-    username: process.env.REDIS_USERNAME,
-    password: process.env.REDIS_PASSWORD,
-    socket: {
-        host: process.env.REDIS_HOST,
-        port: process.env.REDIS_PORT
-    }
-})
-
-let worker;
-
-const mediaCodecs = [
-    {
-        kind: 'audio',
-        mimeType: 'audio/opus',
-        clockRate: 48000,
-        channels: 2
-    },
-    {
-        kind: 'video',
-        mimeType: 'video/H264',
-        clockRate: 90000,
-        parameters: {
-            'level-asymmetry-allowed': 1,
-            'packetization-mode': 1,
-            'profile-level-id': '42e01f'
-        }
-    }
-];
-
-export const createWorker = async () => {
-    worker = await mediasoup.createWorker({
-        rtcMinPort: 2000,
-        rtcMaxPort: 4000
-    })
-
-    console.log(`worker pid ${worker.pid}`);
-
-    worker.on('died', (error) => {
-        console.error('mediasoup worker has died');
-        setTimeout(() => {
-            process.exit(1)
-        }, 2000);
-    })
-
-    return worker;
-}
-
-const createWebRtcTransport = async (router) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const webRtcTransportOptions = {
-                listenIps: [{ ip: '127.0.0.1', announcedIp: null }],
-                enableUdp: true,
-                enableTcp: true,
-                preferUdp: true,
-                minPort: 30000,
-                maxPort: 60000
-            }
-
-            const transport = await router.createWebRtcTransport(webRtcTransportOptions)
-
-            transport.on('dtlsstatechange', (dtlsState) => {
-                if (dtlsState === 'closed') {
-                    transport.close()
-                }
-            })
-
-            transport.on('close', () => {
-                transport.close();
-                console.log('transport closed');
-            })
-
-            resolve(transport)
-        } catch (error) {
-            reject(error)
-        }
-    })
-}
+import setVideoCall, { createWorker } from './service/videoCall.service.js';
 
 dotenv.config({
     path: './.env'
@@ -104,7 +22,7 @@ const io = new Server(server, {
 })
 
 setupChat(io);
-// setVideoCall(io);
+setVideoCall(io);
 
 const connections = io.of('/videoCall')
 
@@ -493,7 +411,6 @@ connectDB()
     .then(() => {
         server.listen(process.env.PORT, async () => {
             console.log(`Server is running on port ${process.env.PORT}`);
-            await client.connect();
             await createWorker();
         })
     })

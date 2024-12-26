@@ -1,8 +1,8 @@
 import { isValidObjectId } from "mongoose";
-import { Task } from "../model/task.model.js";
-import apiError from "../util/apiError.js";
-import apiResponse from "../util/apiResponse.js";
-import asyncHandler from "../util/asyncHandler.js";
+import { Task } from "../model/task.model";
+import apiError from "../util/apiError";
+import apiResponse from "../util/apiResponse";
+import asyncHandler from "../util/asyncHandler";
 
 const createTask = asyncHandler(async(req, res) => {
 
