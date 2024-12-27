@@ -1,7 +1,8 @@
 import express from "express";
-import { getCurrentUser, login, logout, register, updateData, forgotPassword, resetPassword} from "../controller/user.controller.js";
+import { getCurrentUser, login, logout, register, updateData, forgotPassword, resetPassword, uploadPhoto} from "../controller/user.controller.js";
 import {verifyJwt} from "../middleware/auth.middleware.js";
 import passport from "../config/passport-google.js";
+import { upload } from "../middleware/multer.middleware.js";
 
 const router = express.Router();
 
@@ -18,6 +19,8 @@ router.route('/get-current').get(verifyJwt, getCurrentUser)
 router.route('/forgot-password').post(forgotPassword)
 
 router.route('/reset-password/:token').patch(resetPassword)
+
+router.route('/upload-photo').post(verifyJwt, upload.single('photo'), uploadPhoto)
 
 router.get('/google-login', passport.authenticate('google', {
     scope: ['profile', 'email'],

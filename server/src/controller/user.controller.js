@@ -3,6 +3,7 @@ import apiResponse from '../util/apiResponse.js';
 import apiError from '../util/apiError.js';
 import asyncHandler from '../util/asyncHandler.js';
 import { sendMail } from '../util/nodeMailer.js';
+import uploadOnCloudinary from "../util/cloudinary.js";
 import crypto from 'crypto';
 
 const generateAccessRefreshToken = async (userId) => {
@@ -215,4 +216,32 @@ const resetPassword = asyncHandler(async(req, res) => {
     .json(new apiResponse(200, user, "Password changed successfully"))
 })
 
-export {register, login, logout, updateData, getCurrentUser, generateAccessRefreshToken, forgotPassword, resetPassword}
+const uploadPhoto = asyncHandler(async(req, res) => {
+    const photoPath = req.file?.path 
+
+    if(!photoPath){
+        throw new apiError(400, "Photo is not provided")
+    }
+
+    const photo = await uploadOnCloudinary(photoPath)
+
+    if(!photo){
+        throw new apiError(500, "Something went wrong will uploading the photo")
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            photo: photo.url
+        },
+        {
+            new: true
+        }
+    ).select("-password -refreshToken")
+
+    return res
+    .status(200)
+    .json(new apiResponse(200, user, "Photo uploaded successfully"))
+})
+
+export {register, login, logout, updateData, getCurrentUser, generateAccessRefreshToken, forgotPassword, resetPassword, uploadPhoto}

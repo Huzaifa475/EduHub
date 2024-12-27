@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
 import GroupIcon from '@mui/icons-material/Group';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
@@ -9,12 +7,12 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
-import './index.css'
-import { Box } from '@mui/material';
+import QueueIcon from '@mui/icons-material/Queue'
 import { useNavigate } from 'react-router';
-import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useLocation } from "react-router-dom";
+import axios from 'axios';
+import './index.css'
 
 
 function Sider() {
@@ -22,12 +20,12 @@ function Sider() {
   const navigate = useNavigate()
   const location = useLocation();
 
-  const handleClickHome = () => {
+  const handleClickSearch = () => {
     navigate('/home')
   }
 
-  const handleClickSearch = () => {
-    navigate('/search')
+  const handleClickCreate = () => {
+    navigate('/create')
   }
 
   const handleClickGroup = () => {
@@ -88,8 +86,8 @@ function Sider() {
     <>
       <Divider />
       <div className='sider-container'>
-        <button onClick={handleClickHome}><HomeIcon/>Home</button>
         <button onClick={handleClickSearch}><SearchIcon/>Serach</button>
+        <button onClick={handleClickCreate}><QueueIcon/>Create Room</button>
         <button onClick={handleClickGroup}><GroupIcon/>Rooms</button>
         <button onClick={handleClickGroupAdd}><GroupAddIcon/>Request</button>
         <button onClick={handleClickNotification}><NotificationsNoneIcon/>Notifications</button>

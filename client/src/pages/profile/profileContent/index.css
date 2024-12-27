@@ -21,5 +21,72 @@
     height: 90%;
     margin: 0.5rem;
     background-color: hsla(215, 15%, 40%, 0.15);
+    display: flex;
 }
 
+.profile-avatar{
+    width: 20%;
+    height: 100%;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.profile-info{
+    width: 80%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.profile-info h1{
+    font-size: x-large;
+}
+
+.profile-info button{
+    color: #66b3ff;
+    background-color: hsla(215, 15%, 40%, 0.15);
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+.profile-info input{
+    width: 80%;
+    height: 30%;
+    color: #66b3ff;
+    background-color: black;
+    outline: none;
+    border: none;
+}
+
+input::placeholder{
+    color: #66b3ff;
+}
+
+.profile-name{
+    width: 50%;
+    height: 20%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-email{
+    width: 50%;
+    height: 20%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+}

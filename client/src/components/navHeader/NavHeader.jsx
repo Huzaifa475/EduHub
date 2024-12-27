@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useLocation } from "react-router-dom";
 import { useEffect } from 'react';
 import './index.css';
-import Cookies from 'js-cookie'
 
 function NavHeader() {
   const [userName, setUserName] = useState(localStorage.getItem('userName') || '')
