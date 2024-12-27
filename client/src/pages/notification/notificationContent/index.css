@@ -6,7 +6,7 @@
     background: #888;
 }
 
-.notification-container{
+.notification-container {
     height: 91.8vh;
     width: 82%;
     color: #66b3ff;
@@ -16,16 +16,28 @@
     gap: 1rem;
 }
 
-.notification-header{
+.notification-header {
     width: 98%;
     height: 10%;
     padding-left: 1rem;
     border-bottom: 1px solid #66b3ff;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
-.notification-content{
+.notification-header button {
+    color: #66b3ff;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.notification-header button:hover {
+    color: #4897e6;
+}
+
+.notification-content {
     width: 98%;
     height: 88%;
     padding-bottom: 5px;
@@ -35,18 +47,40 @@
     gap: 5px;
 }
 
-.notification{
+.notification {
     width: 100%;
-    height: auto;
-    padding-left: 0.5rem;
+    height: 10%;
+    padding: 0.5rem;
     background-color: hsla(215, 15%, 40%, 0.15);
     border-radius: 5px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.notification h1{
+.notification h1 {
     font-size: 1.3rem;
     font-weight: 400;
+}
+
+.notification-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.notification-button p{
+    font-size: larger;
+}
+
+.notification-button button {
+    color: #66b3ff;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.notification-button button:hover {
+    color: #4897e6;
 }

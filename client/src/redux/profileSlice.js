@@ -66,9 +66,9 @@ const profileSlice = createSlice({
         setLoading: (state) => {
             state.loading = true
         },
-        setError: (state, error) => {
+        setError: (state, action) => {
             state.loading = false
-            state.error = error
+            state.error = action.payload
         },
         resetState: () => initialState
     }

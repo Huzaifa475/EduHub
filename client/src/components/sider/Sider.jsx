@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Divider from '@mui/material/Divider';
 import SearchIcon from '@mui/icons-material/Search';
 import GroupIcon from '@mui/icons-material/Group';
@@ -16,7 +16,7 @@ import './index.css'
 
 
 function Sider() {
-  let accessToken = localStorage.getItem('accessToken');
+  const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'))
   const navigate = useNavigate()
   const location = useLocation();
 
@@ -44,13 +44,17 @@ function Sider() {
     navigate('/profile')
   }
 
-  const handleClickLogOut = async() => {
+  const handleClickLogOut = async () => {
     let res
     let toastId
     try {
       res = await axios({
         method: 'post',
-        url: '/api/v1/users/logout'
+        url: '/api/v1/users/logout',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
+        }
       })
       toastId = toast.success(res?.data?.message, { duration: 1000 })
       localStorage.clear();
@@ -75,31 +79,33 @@ function Sider() {
   }
 
   useEffect(() => {
-    if(!accessToken){
-      const params = new URLSearchParams(location.search)
-      accessToken = params.get('accessToken')
-      localStorage.setItem('accessToken', accessToken)
-      console.log(accessToken);
+    if (!accessToken) {
+      const params = new URLSearchParams(location.search);
+      const tokenFromURL = params.get('accessToken');
+      if (tokenFromURL) {
+        localStorage.setItem('accessToken', tokenFromURL);
+        setAccessToken(tokenFromURL);
+      }
     }
   }, [location, accessToken])
   return (
     <>
       <Divider />
       <div className='sider-container'>
-        <button onClick={handleClickSearch}><SearchIcon/>Serach</button>
-        <button onClick={handleClickCreate}><QueueIcon/>Create Room</button>
-        <button onClick={handleClickGroup}><GroupIcon/>Rooms</button>
-        <button onClick={handleClickGroupAdd}><GroupAddIcon/>Request</button>
-        <button onClick={handleClickNotification}><NotificationsNoneIcon/>Notifications</button>
-        <button onClick={handleClickPerson}><PersonIcon/>Profile</button>
+        <button onClick={handleClickSearch}><SearchIcon />Serach</button>
+        <button onClick={handleClickCreate}><QueueIcon />Create Room</button>
+        <button onClick={handleClickGroup}><GroupIcon />Rooms</button>
+        <button onClick={handleClickGroupAdd}><GroupAddIcon />Request</button>
+        <button onClick={handleClickNotification}><NotificationsNoneIcon />Notifications</button>
+        <button onClick={handleClickPerson}><PersonIcon />Profile</button>
         {
           accessToken ?
-          <button onClick={handleClickLogOut}><LogoutIcon/>LogOut</button>
-          :
-          <button onClick={handleClickLogIn}><LoginIcon/>LogIn</button>
+            <button onClick={handleClickLogOut}><LogoutIcon />LogOut</button>
+            :
+            <button onClick={handleClickLogIn}><LoginIcon />LogIn</button>
         }
       </div>
-      <Toaster/>
+      <Toaster />
     </>
   )
 }
