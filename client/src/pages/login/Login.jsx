@@ -18,6 +18,8 @@ function Login() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [logInLoading, setLogInLoading] = React.useState(false);
   const [googleLoading, setGoogleLoading] = React.useState(false);
+  const [userNameOrEmail, setUserNameOrEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -34,20 +36,20 @@ function Login() {
     setGoogleLoading(true);
     let toastId
     try {
-        window.location.href = 'http://localhost:3000/api/v1/users/google-login'
+      window.location.href = 'http://localhost:3000/api/v1/users/google-login'
     } catch (error) {
-        if (error.response) {
-            if (error.response?.data?.message)
-                toastId = toast.error(error.response?.data?.message, {duration: 1000});
-            else
-                toastId = toast.error(error.request?.statusText, {duration: 1000});
-        }
-        else if (error.request) {
-            toastId = toast.error(error.request?.statusText, {duration: 1000});
-        }
+      if (error.response) {
+        if (error.response?.data?.message)
+          toastId = toast.error(error.response?.data?.message, { duration: 1000 });
+        else
+          toastId = toast.error(error.request?.statusText, { duration: 1000 });
+      }
+      else if (error.request) {
+        toastId = toast.error(error.request?.statusText, { duration: 1000 });
+      }
     } finally {
-        setGoogleLoading(false);
-        toast.dismiss(toastId)
+      setGoogleLoading(false);
+      toast.dismiss(toastId)
     }
   }
 
@@ -59,13 +61,42 @@ function Login() {
     navigate('/forgot-password')
   }
 
-  const handleLogIn = async() => {
+  const handleLogIn = async () => {
     let res
     let toastId
     try {
-      
+      res = await axios({
+        method: 'post',
+        url: '/api/v1/users/login',
+        data: {
+          userName: userNameOrEmail,
+          email: userNameOrEmail,
+          password: password
+        }
+      })
+      toastId = toast.success(res?.data?.message, { duration: 1000 })
+      const accessToken = res?.data?.data?.accessToken
+      const userName = res?.data?.data?.user?.userName
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('userName', userName);
+      setTimeout(() => {
+          navigate('/home', { replace: true })
+      }, 500)
     } catch (error) {
-      
+      if (error.response) {
+        if (error.response?.data?.message)
+          toastId = toast.error(error.response?.data?.message, { duration: 1000 });
+        else
+          toastId = toast.error(error.request?.statusText, { duration: 1000 });
+      }
+      else if (error.request) {
+        toastId = toast.error(error.request?.statusText, { duration: 1000 });
+      }
+    } finally {
+      setUserNameOrEmail('')
+      setPassword('')
+      toast.dismiss(toastId)
+      setLogInLoading(false)
     }
   }
   return (
@@ -98,6 +129,8 @@ function Login() {
               bgcolor: 'black',
               borderRadius: '4px'
             }}
+            value={userNameOrEmail}
+            onChange={(e) => setUserNameOrEmail(e.target.value)}
           />
         </FormControl>
         <FormControl variant="outlined">
@@ -134,6 +167,8 @@ function Login() {
               color: 'white',
               borderRadius: '4px'
             }}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </FormControl>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.5rem' }}>
@@ -183,6 +218,7 @@ function Login() {
           </Button>
         </Box>
       </Box>
+      <Toaster/>
     </div>
   )
 }

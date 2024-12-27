@@ -12,6 +12,8 @@ import LoginIcon from '@mui/icons-material/Login';
 import './index.css'
 import { Box } from '@mui/material';
 import { useNavigate } from 'react-router';
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 function Sider() {
@@ -42,8 +44,30 @@ function Sider() {
     navigate('/profile')
   }
 
-  const handleClickLogOut = () => {
-
+  const handleClickLogOut = async() => {
+    let res
+    let toastId
+    try {
+      res = await axios({
+        method: 'post',
+        url: '/api/v1/users/logout'
+      })
+      toastId = toast.success(res?.data?.message, { duration: 1000 })
+      localStorage.clear();
+      navigate('/')
+    } catch (error) {
+      if (error.response) {
+        if (error.response?.data?.message)
+          toastId = toast.error(error.response?.data?.message, { duration: 1000 });
+        else
+          toastId = toast.error(error.request?.statusText, { duration: 1000 });
+      }
+      else if (error.request) {
+        toastId = toast.error(error.request?.statusText, { duration: 1000 });
+      }
+    } finally {
+      toast.dismiss(toastId)
+    }
   }
 
   const handleClickLogIn = () => {
@@ -66,6 +90,7 @@ function Sider() {
           <button onClick={handleClickLogIn}><LoginIcon/>LogIn</button>
         }
       </div>
+      <Toaster/>
     </>
   )
 }

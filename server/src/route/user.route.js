@@ -38,12 +38,12 @@ router.get(
 
             const options = {
                 httpOnly: true,
-                secure: true
+                path: '/'
             }
 
             res.cookie("accessToken", tokens.accessToken, options)
             res.cookie("refreshToken", tokens.refreshToken, options)
-            res.redirect(`http://localhost:5173/home?login=${user.userName}`)
+            res.redirect(`http://localhost:5173/home?login=${user.userName}&accessToken=${tokens.accessToken}`)
         } catch (error) {
             res.redirect("http://localhost:5173")
         }

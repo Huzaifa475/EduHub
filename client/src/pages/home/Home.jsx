@@ -5,10 +5,10 @@ import Slider from '../../components/sider/Sider.jsx';
 function Home() {
   return (
     <>
-        <NavHeader/>
-        <div className='home-container'>
-            <Slider/>
-        </div>
+      <NavHeader />
+      <div className='home-container'>
+        <Slider />
+      </div>
     </>
   )
 }
