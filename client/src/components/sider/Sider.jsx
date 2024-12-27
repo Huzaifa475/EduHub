@@ -8,23 +8,63 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
 import './index.css'
 import { Box } from '@mui/material';
+import { useNavigate } from 'react-router';
 
 
 function Sider() {
+  const accessToken = localStorage.getItem('accessToken')
+  const navigate = useNavigate()
 
+  const handleClickHome = () => {
+    navigate('/home')
+  }
+
+  const handleClickSearch = () => {
+    navigate('/search')
+  }
+
+  const handleClickGroup = () => {
+    navigate('/rooms')
+  }
+
+  const handleClickGroupAdd = () => {
+    navigate('/requested-rooms')
+  }
+
+  const handleClickNotification = () => {
+    navigate('/notification')
+  }
+
+  const handleClickPerson = () => {
+    navigate('/profile')
+  }
+
+  const handleClickLogOut = () => {
+
+  }
+
+  const handleClickLogIn = () => {
+    navigate('/')
+  }
   return (
     <>
       <Divider />
       <div className='sider-container'>
-        <button><HomeIcon/>Home</button>
-        <button><SearchIcon/>Serach</button>
-        <button><GroupIcon/>Rooms</button>
-        <button><GroupAddIcon/>Request</button>
-        <button><NotificationsNoneIcon/>Notifications</button>
-        <button><PersonIcon/>Profile</button>
-        <button><LogoutIcon/>Logout</button>
+        <button onClick={handleClickHome}><HomeIcon/>Home</button>
+        <button onClick={handleClickSearch}><SearchIcon/>Serach</button>
+        <button onClick={handleClickGroup}><GroupIcon/>Rooms</button>
+        <button onClick={handleClickGroupAdd}><GroupAddIcon/>Request</button>
+        <button onClick={handleClickNotification}><NotificationsNoneIcon/>Notifications</button>
+        <button onClick={handleClickPerson}><PersonIcon/>Profile</button>
+        {
+          accessToken ?
+          <button onClick={handleClickLogOut}><LogoutIcon/>LogOut</button>
+          :
+          <button onClick={handleClickLogIn}><LoginIcon/>LogIn</button>
+        }
       </div>
     </>
   )

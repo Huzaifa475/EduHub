@@ -23,7 +23,8 @@ html body{
 .sider-container{
     width: 18%;
     height: 91.8vh;
-    background-color: #2e2e2e;
+    background-color: rgba(0, 0, 0, 0.87);
+    border-right: 1px solid #66b3ff;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -32,21 +33,22 @@ html body{
 }
 
 .sider-container button{
-    width: 90%;
+    width: 80%;
     height: 10%;
-    color: white;
-    background-color: #2e2e2e;
+    color: #66b3ff;
+    background-color: rgba(0, 0, 0, 0.87);
     outline: none;
     border: none;
-    font-size: larger;
+    font-size: 1rem;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 1rem;
     cursor: pointer;
+    transition: 100ms ease-in-out;
 }
 
 .sider-container button:hover{
-    font-size: x-large;
+    font-size: 1.1rem;
 }

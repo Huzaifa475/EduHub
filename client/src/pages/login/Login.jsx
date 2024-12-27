@@ -11,6 +11,8 @@ import InputLabel from '@mui/material/InputLabel';
 import GoogleIcon from '@mui/icons-material/Google';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useNavigate } from 'react-router';
+import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
 
 function Login() {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -29,7 +31,24 @@ function Login() {
   };
 
   const handleGoogle = () => {
-    googleLoading(true)
+    setGoogleLoading(true);
+    let toastId
+    try {
+        window.location.href = 'http://localhost:3000/api/v1/users/google-login'
+    } catch (error) {
+        if (error.response) {
+            if (error.response?.data?.message)
+                toastId = toast.error(error.response?.data?.message, {duration: 1000});
+            else
+                toastId = toast.error(error.request?.statusText, {duration: 1000});
+        }
+        else if (error.request) {
+            toastId = toast.error(error.request?.statusText, {duration: 1000});
+        }
+    } finally {
+        setGoogleLoading(false);
+        toast.dismiss(toastId)
+    }
   }
 
   const handleSignUpRedirect = () => {
@@ -40,18 +59,24 @@ function Login() {
     navigate('/forgot-password')
   }
 
-  const handleLogIn = () => {
-    
+  const handleLogIn = async() => {
+    let res
+    let toastId
+    try {
+      
+    } catch (error) {
+      
+    }
   }
   return (
-    <div className='login-container' style={{backgroundColor: '#2a2a2a', borderRadius: '5px'}}>
+    <div className='login-container' style={{ backgroundColor: '#2a2a2a', borderRadius: '5px', width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'column',
           gap: '1rem',
           width: '400px',
-          height: '380px',
+          height: '440px',
           margin: '0 auto',
           padding: '2rem',
           boxShadow: 3,
@@ -76,7 +101,7 @@ function Login() {
           />
         </FormControl>
         <FormControl variant="outlined">
-          <InputLabel 
+          <InputLabel
             htmlFor="outlined-adornment-password"
             sx={{
               color: 'grey'

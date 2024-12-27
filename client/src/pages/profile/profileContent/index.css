@@ -1,0 +1,25 @@
+.profile-container{
+    width: 82%;
+    height: 91.8vh;
+    color: #66b3ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-header{
+    width: 98%;
+    height: 10%;
+    padding-left: 1rem;
+    border-bottom: 1px solid #66b3ff;
+    display: flex;
+    align-items: center;
+}
+
+.profile-content{
+    width: 98%;
+    height: 90%;
+    margin: 0.5rem;
+    background-color: hsla(215, 15%, 40%, 0.15);
+}
+

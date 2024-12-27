@@ -30,14 +30,14 @@ function ResetPassword() {
         setResetLoading(true);
     }
     return (
-        <div className='reset-password-container' style={{ backgroundColor: '#2a2a2a', borderRadius: '5px' }}>
+        <div className='reset-password-container' style={{ backgroundColor: '#2a2a2a', borderRadius: '5px', width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Box
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '1rem',
                     width: '400px',
-                    height: '230px',
+                    height: '300px',
                     margin: '0 auto',
                     padding: '2rem',
                     boxShadow: 3,

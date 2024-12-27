@@ -43,7 +43,7 @@ router.get(
 
             res.cookie("accessToken", tokens.accessToken, options)
             res.cookie("refreshToken", tokens.refreshToken, options)
-            res.redirect(`http://localhost:5173/home?login=${user.name}`)
+            res.redirect(`http://localhost:5173/home?login=${user.userName}`)
         } catch (error) {
             res.redirect("http://localhost:5173")
         }

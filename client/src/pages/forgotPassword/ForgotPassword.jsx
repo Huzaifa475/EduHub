@@ -13,13 +13,15 @@ function ForgotPassword() {
         navigate('/reset-password/:token')
     }
     return (
-        <div className="forgot-password-container" style={{backgroundColor: '#2a2a2a', borderRadius: '5px'}}>
+        <div className="forgot-password-container" style={{backgroundColor: '#2a2a2a', borderRadius: '5px', width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Box
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     gap: '1rem',
-                    width: '400px',
+                    width: '450px',
                     height: '150px',
                     margin: '0 auto',
                     padding: '2rem',

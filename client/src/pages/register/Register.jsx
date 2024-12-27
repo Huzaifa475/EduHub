@@ -11,12 +11,17 @@ import InputLabel from '@mui/material/InputLabel';
 import GoogleIcon from '@mui/icons-material/Google';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useNavigate } from 'react-router';
+import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
 import './index.css';
 
 function Register() {
     const [showPassword, setShowPassword] = React.useState(false);
     const [signUpLoading, setSignUpLoading] = React.useState(false);
     const [googleLoading, setGoogleLoading] = React.useState(false);
+    const [userName, setUserName] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
     const navigate = useNavigate();
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -29,12 +34,63 @@ function Register() {
         event.preventDefault();
     };
 
-    const handleSignUp = () => {
+    axios.defaults.withCredentials = true;
+    const handleSignUp = async () => {
         setSignUpLoading(true)
+        let res
+        let toastId
+        try {
+            res = await axios({
+                method: 'post',
+                url: '/api/v1/users/register',
+                data: {
+                    userName,
+                    email,
+                    password
+                }
+            })
+            toastId = toast.success(res?.data?.message, { duration: 1000 })
+            setTimeout(() => {
+                navigate('/', { replace: true })
+            }, 500)
+        } catch (error) {
+            if (error.response) {
+                if (error.response?.data?.message)
+                    toastId = toast.error(error.response?.data?.message, {duration: 1000});
+                else
+                    toastId = toast.error(error.request?.statusText, {duration: 1000});
+            }
+            else if (error.request) {
+                toastId = toast.error(error.request?.statusText, {duration: 1000});
+            }
+        } finally {
+            setUserName('')
+            setEmail('')
+            setPassword('')
+            setSignUpLoading(false)
+            toast.dismiss(toastId)
+        }
     }
 
-    const handleGoogle = () => {
+    const handleGoogle = async() => {
         setGoogleLoading(true);
+        let toastId
+        try {
+            window.location.href = 'http://localhost:3000/api/v1/users/google-login'
+        } catch (error) {
+            if (error.response) {
+                if (error.response?.data?.message)
+                    toastId = toast.error(error.response?.data?.message, {duration: 1000});
+                else
+                    toastId = toast.error(error.request?.statusText, {duration: 1000});
+            }
+            else if (error.request) {
+                toastId = toast.error(error.request?.statusText, {duration: 1000});
+            }
+        } finally {
+            setGoogleLoading(false);
+            toast.dismiss(toastId)
+        }
     }
 
     const handleLoginRedirect = () => {
@@ -42,14 +98,14 @@ function Register() {
     }
 
     return (
-        <div className='signup-main-container' style={{backgroundColor: '#2a2a2a', borderRadius: '5px'}}>
+        <div className='signup-container' style={{ backgroundColor: '#2a2a2a', borderRadius: '5px', width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Box
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '1rem',
                     width: '400px',
-                    height: '400px',
+                    height: '450px',
                     margin: '0 auto',
                     padding: '2rem',
                     boxShadow: 3,
@@ -71,6 +127,8 @@ function Register() {
                             bgcolor: 'black',
                             borderRadius: '4px'
                         }}
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
                     />
                 </FormControl>
                 <FormControl>
@@ -83,6 +141,8 @@ function Register() {
                             bgcolor: 'black',
                             borderRadius: '4px'
                         }}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                 </FormControl>
                 <FormControl variant="outlined">
@@ -119,6 +179,8 @@ function Register() {
                             color: 'white',
                             borderRadius: '4px'
                         }}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                 </FormControl>
                 <LoadingButton
@@ -159,6 +221,7 @@ function Register() {
                     </Button>
                 </Box>
             </Box>
+            <Toaster />
         </div>
     );
 }
