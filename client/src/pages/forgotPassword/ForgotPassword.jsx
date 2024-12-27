@@ -3,17 +3,41 @@ import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
-import React from 'react';
-import { useNavigate } from 'react-router';
+import React, { useState } from 'react';
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 
 function ForgotPassword() {
-    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
 
-    const handleResetPassword = () => {
-        navigate('/reset-password/:token')
+    const handleResetPassword = async () => {
+        let res
+        try {
+            res = await axios({
+                method: 'post',
+                url: '/api/v1/users/forgot-password',
+                data: {
+                    email
+                }
+            })
+            toast.success(res?.data?.message, { duration: 1000 })
+        } catch (error) {
+            if (error.response) {
+                if (error.response?.data?.message)
+                    toast.error(error.response?.data?.message, { duration: 1000 });
+                else
+                    toast.error(error.request?.statusText, { duration: 1000 });
+            }
+            else if (error.request) {
+                toast.error(error.request?.statusText, { duration: 1000 });
+            }
+        } finally {
+            setEmail('')
+        }
+        window.location.href = 'https://mail.google.com';
     }
     return (
-        <div className="forgot-password-container" style={{backgroundColor: '#2a2a2a', borderRadius: '5px', width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <div className="forgot-password-container" style={{ backgroundColor: '#2a2a2a', borderRadius: '5px', width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Box
                 sx={{
                     display: 'flex',
@@ -36,7 +60,6 @@ function ForgotPassword() {
                     Forgot Password
                 </Typography>
                 <Paper
-                    component="form"
                     sx={{
                         p: '2px 4px',
                         display: 'flex',
@@ -57,16 +80,18 @@ function ForgotPassword() {
                         }}
                         placeholder="Enter your email"
                         inputProps={{ 'aria-label': 'search google maps' }}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                     <IconButton
                         type="button"
                         sx={{
                             p: '10px',
-                            outline: 'none',  
+                            outline: 'none',
                             boxShadow: 'none',
                             '&:focus': {
-                                outline: '#fff',  
-                                boxShadow: '0 0 0 3px rgba(128, 128, 128, 0.3)',  
+                                outline: '#fff',
+                                boxShadow: '0 0 0 3px rgba(128, 128, 128, 0.3)',
                             }
                         }}
                         onClick={handleResetPassword}
@@ -76,6 +101,7 @@ function ForgotPassword() {
                     </IconButton>
                 </Paper>
             </Box>
+            <Toaster />
         </div>
     );
 }

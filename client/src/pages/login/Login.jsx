@@ -34,22 +34,20 @@ function Login() {
 
   const handleGoogle = () => {
     setGoogleLoading(true);
-    let toastId
     try {
       window.location.href = 'http://localhost:3000/api/v1/users/google-login'
     } catch (error) {
       if (error.response) {
         if (error.response?.data?.message)
-          toastId = toast.error(error.response?.data?.message, { duration: 1000 });
+          toast.error(error.response?.data?.message, { duration: 1000 });
         else
-          toastId = toast.error(error.request?.statusText, { duration: 1000 });
+          toast.error(error.request?.statusText, { duration: 1000 });
       }
       else if (error.request) {
-        toastId = toast.error(error.request?.statusText, { duration: 1000 });
+          toast.error(error.request?.statusText, { duration: 1000 });
       }
     } finally {
       setGoogleLoading(false);
-      toast.dismiss(toastId)
     }
   }
 
@@ -63,7 +61,6 @@ function Login() {
 
   const handleLogIn = async () => {
     let res
-    let toastId
     try {
       res = await axios({
         method: 'post',
@@ -74,7 +71,7 @@ function Login() {
           password: password
         }
       })
-      toastId = toast.success(res?.data?.message, { duration: 1000 })
+      toast.success(res?.data?.message, { duration: 1000 })
       const accessToken = res?.data?.data?.accessToken
       const userName = res?.data?.data?.user?.userName
       localStorage.setItem('accessToken', accessToken);
@@ -85,17 +82,16 @@ function Login() {
     } catch (error) {
       if (error.response) {
         if (error.response?.data?.message)
-          toastId = toast.error(error.response?.data?.message, { duration: 1000 });
+          toast.error(error.response?.data?.message, { duration: 1000 });
         else
-          toastId = toast.error(error.request?.statusText, { duration: 1000 });
+          toast.error(error.request?.statusText, { duration: 1000 });
       }
       else if (error.request) {
-        toastId = toast.error(error.request?.statusText, { duration: 1000 });
+          toast.error(error.request?.statusText, { duration: 1000 });
       }
     } finally {
       setUserNameOrEmail('')
       setPassword('')
-      toast.dismiss(toastId)
       setLogInLoading(false)
     }
   }

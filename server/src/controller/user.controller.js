@@ -170,6 +170,10 @@ const forgotPassword = asyncHandler(async(req, res) => {
             subject: 'Password change request from EduHub',
             message: message
         })
+
+        return res
+        .status(200)
+        .json(new apiResponse(200, "Email sent successfully"))
     } catch (error) {
         user.passwordResetToken = undefined
         user.passwordResetTokenExpiry = undefined

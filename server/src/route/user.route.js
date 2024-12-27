@@ -19,11 +19,6 @@ router.route('/forgot-password').post(forgotPassword)
 
 router.route('/reset-password/:token').patch(resetPassword)
 
-// router.route('/google-login').get(passport.authenticate('google', {
-//     scope: ['profile', 'email'],
-//     prompt: 'consent'
-// }))
-
 router.get('/google-login', passport.authenticate('google', {
     scope: ['profile', 'email'],
     prompt: 'consent'
@@ -38,6 +33,7 @@ router.get(
 
             const options = {
                 httpOnly: true,
+                secure: true,
                 path: '/'
             }
 
@@ -49,21 +45,5 @@ router.get(
         }
     }
 );
-
-// router.route('/google-login/callback').get(passport.authenticate('google'), async(req, res) => {
-//     try {
-//         const {user, tokens} = req.user
-
-//         const options = {
-//             httpOnly: true,
-//             secure: true
-//         }
-
-//         res.cookie("accessToken", tokens.accessToken, options)
-//         res.cookie("refreshToken", tokens.refreshToken, options)
-//     } catch (error) {
-//         res.redirect("http://localhost:3000/api/v1/user")
-//     }
-// })
 
 export default router;

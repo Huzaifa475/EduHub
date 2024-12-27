@@ -5,7 +5,6 @@ import './index.css';
 import Cookies from 'js-cookie'
 
 function NavHeader() {
-  let accessToken = localStorage.getItem('accessToken');
   const [userName, setUserName] = useState(localStorage.getItem('userName') || '')
   const location = useLocation();
   
@@ -14,14 +13,7 @@ function NavHeader() {
       const params = new URLSearchParams(location.search);
       setUserName(params.get('login'));
     }
-
-    if(!accessToken){
-      const params = new URLSearchParams(location.search)
-      accessToken = params.get('accessToken')
-      localStorage.setItem('accessToken', accessToken)
-      console.log(accessToken);
-    }
-  }, [location]);
+  }, [location, userName]);
   return (
     <div className='nav-header-container'>
       <h3>

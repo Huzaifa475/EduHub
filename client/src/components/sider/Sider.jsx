@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import HomeIcon from '@mui/icons-material/Home';
@@ -14,11 +14,13 @@ import { Box } from '@mui/material';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+import { useLocation } from "react-router-dom";
 
 
 function Sider() {
-  const accessToken = localStorage.getItem('accessToken')
+  let accessToken = localStorage.getItem('accessToken');
   const navigate = useNavigate()
+  const location = useLocation();
 
   const handleClickHome = () => {
     navigate('/home')
@@ -73,6 +75,15 @@ function Sider() {
   const handleClickLogIn = () => {
     navigate('/')
   }
+
+  useEffect(() => {
+    if(!accessToken){
+      const params = new URLSearchParams(location.search)
+      accessToken = params.get('accessToken')
+      localStorage.setItem('accessToken', accessToken)
+      console.log(accessToken);
+    }
+  }, [location, accessToken])
   return (
     <>
       <Divider />

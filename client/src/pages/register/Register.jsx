@@ -38,7 +38,6 @@ function Register() {
     const handleSignUp = async () => {
         setSignUpLoading(true)
         let res
-        let toastId
         try {
             res = await axios({
                 method: 'post',
@@ -49,47 +48,44 @@ function Register() {
                     password
                 }
             })
-            toastId = toast.success(res?.data?.message, { duration: 1000 })
+            toast.success(res?.data?.message, { duration: 1000 })
             setTimeout(() => {
                 navigate('/', { replace: true })
             }, 500)
         } catch (error) {
             if (error.response) {
                 if (error.response?.data?.message)
-                    toastId = toast.error(error.response?.data?.message, {duration: 1000});
+                    toast.error(error.response?.data?.message, {duration: 1000});
                 else
-                    toastId = toast.error(error.request?.statusText, {duration: 1000});
+                    toast.error(error.request?.statusText, {duration: 1000});
             }
             else if (error.request) {
-                toastId = toast.error(error.request?.statusText, {duration: 1000});
+                toast.error(error.request?.statusText, {duration: 1000});
             }
         } finally {
             setUserName('')
             setEmail('')
             setPassword('')
             setSignUpLoading(false)
-            toast.dismiss(toastId)
         }
     }
 
     const handleGoogle = async() => {
         setGoogleLoading(true);
-        let toastId
         try {
             window.location.href = 'http://localhost:3000/api/v1/users/google-login'
         } catch (error) {
             if (error.response) {
                 if (error.response?.data?.message)
-                    toastId = toast.error(error.response?.data?.message, {duration: 1000});
+                    toast.error(error.response?.data?.message, {duration: 1000});
                 else
-                    toastId = toast.error(error.request?.statusText, {duration: 1000});
+                    toast.error(error.request?.statusText, {duration: 1000});
             }
             else if (error.request) {
-                toastId = toast.error(error.request?.statusText, {duration: 1000});
+                toast.error(error.request?.statusText, {duration: 1000});
             }
         } finally {
             setGoogleLoading(false);
-            toast.dismiss(toastId)
         }
     }
 

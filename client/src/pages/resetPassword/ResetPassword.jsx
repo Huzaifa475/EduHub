@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
@@ -8,11 +8,18 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import { Box, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router';
 
 function ResetPassword() {
     const [showPassword, setShowPassword] = React.useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
     const [resetLoading, setResetLoading] = React.useState(false);
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const { token } = useParams()
+    const navigate = useNavigate()
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -26,8 +33,35 @@ function ResetPassword() {
         event.preventDefault();
     };
 
-    const handleReset = () => {
+    const handleReset = async() => {
         setResetLoading(true);
+        let res 
+        try {
+            res = await axios({
+                method: 'patch',
+                url: `/api/v1/users/reset-password/${token}`,
+                data: {
+                    password,
+                    confirmPassword
+                }
+            })
+            toast.success(res?.data?.message, {duration: 1000})
+            navigate('/')
+        } catch (error) {
+            if (error.response) {
+                if (error.response?.data?.message)
+                  toast.error(error.response?.data?.message, { duration: 1000 });
+                else
+                  toast.error(error.request?.statusText, { duration: 1000 });
+              }
+              else if (error.request) {
+                   toast.error(error.request?.statusText, { duration: 1000 });
+              }
+        } finally {
+            setPassword('')
+            setConfirmPassword('')
+            setResetLoading(false);
+        }
     }
     return (
         <div className='reset-password-container' style={{ backgroundColor: '#2a2a2a', borderRadius: '5px', width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -85,6 +119,8 @@ function ResetPassword() {
                             color: 'white',
                             borderRadius: '4px'
                         }}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                 </FormControl>
 
@@ -122,6 +158,8 @@ function ResetPassword() {
                             color: 'white',
                             borderRadius: '4px'
                         }}
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                 </FormControl>
 
