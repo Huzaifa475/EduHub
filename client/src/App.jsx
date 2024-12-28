@@ -10,6 +10,7 @@ import RequestedRooms from './pages/requestedRooms/RequestedRooms.jsx'
 import Create from './pages/create/Create.jsx'
 import Search from './pages/search/Search.jsx'
 import './App.css'
+import Room from './pages/room/Room.jsx'
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
       <Route path='/rooms' element={<Rooms/>}/>
       <Route path='/requested-rooms' element={<RequestedRooms/>}/>
       <Route path='/create' element={<Create/>}/>
+      <Route path='/room' element={<Room/>}/>
     </Routes>
   )
 }
