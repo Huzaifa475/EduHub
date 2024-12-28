@@ -1,0 +1,31 @@
+
+.create-container{
+    width: 82%;
+    height: 91.8vh;
+    color: #66b3ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.create-header{
+    width: 98%;
+    height: 10%;
+    padding-left: 1rem;
+    border-bottom: 1px solid #66b3ff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.create-content{
+    width: 98%;
+    height: 88%;
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+    gap: 1rem;
+}

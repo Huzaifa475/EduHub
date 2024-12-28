@@ -62,7 +62,7 @@ export const fetchSearchRooms = ({ prompt }) => async(dispatch) => {
     }
 }
 
-export const createRoom = ({name, description, publicOrPrivate, tags}) => async(dispatch) => {
+export const createRoom = ({name, description, roomType, tags}) => async(dispatch) => {
     const accessToken = localStorage.getItem('accessToken')
     try {
         dispatch(setLoading())
@@ -72,7 +72,7 @@ export const createRoom = ({name, description, publicOrPrivate, tags}) => async(
             data: {
                 name,
                 description,
-                publicOrPrivate,
+                publicOrPrivate: roomType,
                 tags
             },
             headers: {

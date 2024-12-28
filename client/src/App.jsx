@@ -7,8 +7,9 @@ import Home from './pages/home/Home.jsx'
 import Notification from './pages/notification/Notification.jsx'
 import Profile from './pages/profile/Profile.jsx'
 import Rooms from './pages/rooms/Rooms.jsx'
-import './App.css'
 import RequestedRooms from './pages/requestedRooms/RequestedRooms.jsx'
+import Create from './pages/create/Create.jsx'
+import './App.css'
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
       <Route path='/profile' element={<Profile/>}/>
       <Route path='/rooms' element={<Rooms/>}/>
       <Route path='/requested-rooms' element={<RequestedRooms/>}/>
+      <Route path='/create' element={<Create/>}/>
     </Routes>
   )
 }
