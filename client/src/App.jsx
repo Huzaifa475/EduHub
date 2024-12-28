@@ -11,6 +11,7 @@ import Create from './pages/create/Create.jsx'
 import Search from './pages/search/Search.jsx'
 import './App.css'
 import Room from './pages/room/Room.jsx'
+import Admin from './pages/admin/Admin.jsx'
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
       <Route path='/requested-rooms' element={<RequestedRooms/>}/>
       <Route path='/create' element={<Create/>}/>
       <Route path='/room' element={<Room/>}/>
+      <Route path='/admin' element={<Admin/>}/>
     </Routes>
   )
 }

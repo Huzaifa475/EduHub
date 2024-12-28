@@ -20,7 +20,7 @@ function Room() {
                 <h1>Description</h1>
                 <h1>Room Type</h1>
                 <h1>Tags</h1>
-                <Button><GroupAddIcon/>Request</Button>
+                <Button sx={{color: 'black', bgcolor: '#66b3ff'}}><GroupAddIcon/>Request</Button>
             </div>
 
             <div className="room-button">
