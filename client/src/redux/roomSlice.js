@@ -46,7 +46,7 @@ export const fetchSearchRooms = ({ prompt }) => async(dispatch) => {
         dispatch(setLoading())
         const res = await axios({
             method: 'get',
-            url: '/api/v1/rooms/search-room',
+            url: `/api/v1/rooms/search-room?prompt=${prompt}`,
             data: {
                 prompt
             },
@@ -118,7 +118,7 @@ const roomSlice = createSlice({
             state.loading = true
         },
         setError: (state, action) => {
-            state.loading = false
+            state.loading = true
             state.error = action.payload
         },
         resetState: () => initialState

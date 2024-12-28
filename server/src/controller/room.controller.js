@@ -294,16 +294,15 @@ const requestProcess = asyncHandler(async(req, res) => {
 
 const searchForRoom = asyncHandler(async(req, res) => {
 
-    const {prompt} = req.body
-    const {page=1, limit=10} = req.query
+    const {prompt} = req.query
 
-    const words = prompt.match(/\b(\w+)\b/g)
+    const words = prompt?.match(/\b(\w+)\b/g)
 
     if (!words || words.length === 0) {
         throw new apiError(400, "Invalid search prompt")
     }
 
-    const rooms = await Room.find({tags: {$in: words}}).skip((page-1) * limit).limit(Number(limit)).select("-members -requests")
+    const rooms = await Room.find({tags: {$in: words}}).select("-members -requests")
 
     return res
     .status(200)
