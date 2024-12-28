@@ -1,0 +1,43 @@
+
+.rooms-container{
+    width: 82%;
+    height: 91.8vh;
+    color: #66b3ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.rooms-header{
+    width: 98%;
+    height: 10%;
+    padding-left: 1rem;
+    border-bottom: 1px solid #66b3ff;
+    display: flex;
+}
+
+.rooms-content{
+    width: 98%;
+    height: 88%;
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    gap: 5px;
+}
+
+.room{
+    width: 100%;
+    height: auto;
+    padding: 0.5rem;
+    background-color: hsla(215, 15%, 40%, 0.15);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.room h1{
+    font-size: 1.3rem;
+    font-weight: 400;
+}

@@ -4,6 +4,7 @@ import './index.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteNotification, deleteNotifications, fetchNotifications } from '../../../redux/notificationSlice';
 import { Skeleton, Stack } from '@mui/material';
+import moment from 'moment';
 
 function NotificationContent() {
     const { notification, loading, error } = useSelector(state => state.notification)
@@ -74,17 +75,17 @@ function NotificationContent() {
             <div className="notification-content">
                 {
                     notification && notification.length > 0 ? (
-                        notification.map((notification) => {
-                            <div className='notification' key={notification._id}>
-                                <h1>{notification.content}</h1>
+                        notification.map((item) => (
+                            <div className='notification' key={item._id}>
+                                <h1>{item.content}</h1>
                                 <div className="notification-button">
-                                    <p>{moment(notification.createdAt).format('LLL')}</p>
-                                    <button onClick={() => dispatch(deleteNotification(notification._id))}>
+                                    <p>{moment(item.createdAt).format('LLL')}</p>
+                                    <button onClick={() => dispatch(deleteNotification(item._id))}>
                                         <DeleteIcon />
                                     </button>
                                 </div>
                             </div>
-                        })
+                        ))
                     )
                         :
                         (

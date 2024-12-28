@@ -4,13 +4,17 @@ import { useEffect } from 'react';
 import './index.css';
 
 function NavHeader() {
-  const [userName, setUserName] = useState(localStorage.getItem('userName') || '')
+  const [userName, setUserName] = useState(localStorage.getItem('userName'))
   const location = useLocation();
   
   useEffect(() => {
-    if(userName === ''){
+    if(!userName){
       const params = new URLSearchParams(location.search);
-      setUserName(params.get('login'));
+      const name = params.get('login');
+      if(name){
+        localStorage.setItem('userName', name);
+        setUserName(name);
+      }
     }
   }, [location, userName]);
   return (

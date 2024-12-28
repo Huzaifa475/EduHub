@@ -6,7 +6,9 @@ import ResetPassword from './pages/resetPassword/ResetPassword.jsx'
 import Home from './pages/home/Home.jsx'
 import Notification from './pages/notification/Notification.jsx'
 import Profile from './pages/profile/Profile.jsx'
+import Rooms from './pages/rooms/Rooms.jsx'
 import './App.css'
+import RequestedRooms from './pages/requestedRooms/RequestedRooms.jsx'
 
 function App() {
 
@@ -19,6 +21,8 @@ function App() {
       <Route path='/home' element={<Home/>}/>
       <Route path='/notification' element={<Notification/>}/>
       <Route path='/profile' element={<Profile/>}/>
+      <Route path='/rooms' element={<Rooms/>}/>
+      <Route path='/requested-rooms' element={<RequestedRooms/>}/>
     </Routes>
   )
 }

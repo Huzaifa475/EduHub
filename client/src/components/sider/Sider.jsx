@@ -95,7 +95,7 @@ function Sider() {
         <button onClick={handleClickSearch}><SearchIcon />Serach</button>
         <button onClick={handleClickCreate}><QueueIcon />Create Room</button>
         <button onClick={handleClickGroup}><GroupIcon />Rooms</button>
-        <button onClick={handleClickGroupAdd}><GroupAddIcon />Request</button>
+        <button onClick={handleClickGroupAdd}><GroupAddIcon />Requests</button>
         <button onClick={handleClickNotification}><NotificationsNoneIcon />Notifications</button>
         <button onClick={handleClickPerson}><PersonIcon />Profile</button>
         {
