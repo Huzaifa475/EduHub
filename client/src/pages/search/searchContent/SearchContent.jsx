@@ -10,15 +10,17 @@ function SearchContent() {
     const [prompt, setPrompt] = useState('');
     const { searchRooms, loading, error } = useSelector(state => state.room);
     const { profile } = useSelector(state => state.profile)
+    const accessToken = localStorage.getItem('accessToken');
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (!profile?._id) {
+        if (accessToken && !profile?._id) {
             dispatch(fetchProfile());
         }
-    }, [dispatch, profile?._id]);
+    }, [dispatch, profile?._id, accessToken]);
 
+    
     useEffect(() => {
         if (profile?._id) {
             localStorage.setItem('id', profile._id);
@@ -117,17 +119,27 @@ function SearchContent() {
             <div className='search-results' style={{ width: '100%', height: '90%', display: 'flex', flexDirection: 'column', alignItems: 'center', overflowY: 'scroll', gap: '5px', paddingBottom: '5px', position: 'relative' }}>
 
                 {
-                    searchRooms && searchRooms.length > 0 ?
+                    searchRooms === null ? (
+                        <div className='room' style={{ width: '98%', height: 'auto', display: 'flex', flexDirection: 'column', color: '#66b3ff' }}>
+                            Start searching for rooms
+                        </div>
+                    ) : searchRooms.length > 0 ? (
                         searchRooms.map((room) => (
-                            <div className='room' style={{ width: '98%', height: 'auto', display: 'flex', flexDirection: 'column', color: '#66b3ff' }} onClick={() => navigate(`/search/${room._id}`)} key={room._id}>
+                            <div
+                                className='room'
+                                style={{ width: '98%', height: 'auto', display: 'flex', flexDirection: 'column', color: '#66b3ff' }}
+                                onClick={() => navigate(`/search/${room._id}`)}
+                                key={room._id}
+                            >
                                 <h1>{room.name}</h1>
                                 <h1>{room.description}</h1>
                             </div>
                         ))
-                        :
-                        (
-                            <div className='room' style={{ width: '98%', height: 'auto', display: 'flex', flexDirection: 'column', color: '#66b3ff' }}>No Related Room</div>
-                        )
+                    ) : (
+                        <div className='room' style={{ width: '98%', height: 'auto', display: 'flex', flexDirection: 'column', color: '#66b3ff' }}>
+                            No Related Room
+                        </div>
+                    )
                 }
             </div>
 

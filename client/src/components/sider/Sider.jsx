@@ -14,8 +14,9 @@ import { useLocation } from "react-router-dom";
 import axios from 'axios';
 import './index.css'
 import { useDispatch } from 'react-redux';
-import { resetState } from '../../redux/profileSlice.js';
-
+import { resetState as profileReset } from '../../redux/profileSlice.js';
+import { resetState as roomReset } from '../../redux/roomSlice.js';
+import { resetState as notificationReset } from '../../redux/notificationSlice.js';
 
 function Sider() {
   const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'))
@@ -61,7 +62,9 @@ function Sider() {
       })
       toastId = toast.success(res?.data?.message, { duration: 1000 })
       localStorage.clear();
-      dispatch(resetState());
+      dispatch(profileReset());
+      dispatch(roomReset());
+      dispatch(notificationReset());
       navigate('/')
     } catch (error) {
       if (error.response) {

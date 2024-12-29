@@ -279,7 +279,7 @@ export const deleteRoom = ({roomId, navigate}) => async(dispatch) => {
 const initialState = {
     rooms: {},
     requestedRooms: {},
-    searchRooms: {},
+    searchRooms: null,
     room: {},
     roomMembers: {},
     roomRequests: {},
