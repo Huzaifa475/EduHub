@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import SearchIcon from '@mui/icons-material/Search';
 import { fetchSearchRooms } from '../../../redux/roomSlice';
+import { useNavigate } from 'react-router';
 
 function SearchContent() {
     const [prompt, setPrompt] = useState('');
     const { searchRooms, loading, error } = useSelector(state => state.room);
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const handleClickSearch = () => {
         dispatch(fetchSearchRooms({ prompt }))
@@ -103,7 +105,7 @@ function SearchContent() {
                 {
                     searchRooms && searchRooms.length > 0 ?
                         searchRooms.map((room) => (
-                            <div className='room' style={{ width: '98%', height: 'auto', display: 'flex', flexDirection: 'column', color: '#66b3ff' }}>
+                            <div className='room' style={{ width: '98%', height: 'auto', display: 'flex', flexDirection: 'column', color: '#66b3ff' }} onClick={() => navigate(`/search/${room._id}`)} key={room._id}>
                                 <h1>{room.name}</h1>
                                 <h1>{room.description}</h1>
                             </div>

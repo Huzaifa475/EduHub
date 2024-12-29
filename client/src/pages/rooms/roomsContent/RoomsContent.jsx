@@ -3,10 +3,12 @@ import './index.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { Skeleton, Stack } from '@mui/material'
 import { fecthRooms } from '../../../redux/roomSlice'
+import { useNavigate } from 'react-router'
 
 function RoomsContent() {
     const { rooms, loading, error } = useSelector(state => state.room)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     useEffect(() => {
         dispatch(fecthRooms())
@@ -60,7 +62,7 @@ function RoomsContent() {
                 {
                     rooms && rooms.length > 0 ? (
                         rooms.map((room) => (
-                            <div className="room" key={room._id}>
+                            <div className="room" key={room._id} onClick={() => navigate(`/room/${room._id}`)}>
                                 <h1>Room: {room.name}</h1>
                                 <h1>Description: {room.description}</h1>
                                 <h1>Mode: {room.publicOrPrivate}</h1>

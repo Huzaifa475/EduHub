@@ -1,5 +1,5 @@
 import express from "express";
-import { createRoom, deleteRoom, getMembers, getRequests, getRoom, removeAMember, requestProcess, requestToRoom, searchForRoom, updateRoomData, userRequestRooms, userRooms } from "../controller/room.controller.js";
+import { createRoom, deleteRoom, getMembers, getRequests, getRoom, getRoomStatus, removeAMember, requestProcess, requestToRoom, searchForRoom, updateRoomData, userRequestRooms, userRooms } from "../controller/room.controller.js";
 import { verifyJwt } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
@@ -27,5 +27,7 @@ router.route('/request-room/:roomId').post(verifyJwt, requestToRoom);
 router.route('/request-process/:roomId/:requestId').post(requestProcess);
 
 router.route('/search-room').get(searchForRoom);
+
+router.route('/room-status/:roomId').get(verifyJwt, getRoomStatus);
 
 export default router;

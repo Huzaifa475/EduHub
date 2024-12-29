@@ -1,0 +1,25 @@
+.search-room-container{
+    width: 100vw;
+    height: 100vh;
+    padding: 10px;
+    color: #66b3ff;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-room-content{
+    width: 100%;
+    height: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-room-header{
+    width: 85%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}

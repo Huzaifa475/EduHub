@@ -309,4 +309,34 @@ const searchForRoom = asyncHandler(async(req, res) => {
     .json(new apiResponse(200, rooms, "Rooms fetch successfully"))
 })
 
-export {createRoom, updateRoomData, deleteRoom, userRooms, userRequestRooms, getRoom, getMembers, getRequests, removeAMember, requestToRoom, requestProcess, searchForRoom}
+const getRoomStatus = asyncHandler(async(req, res) => {
+
+    const {roomId} = req.params
+    let status
+
+    if(!isValidObjectId(roomId)){
+        throw new apiError(404, "Room not found")
+    }
+
+    const room = await Room.findById(roomId)
+
+    if (!room) {
+        throw new apiError(404, "Room not found");
+    }
+
+    if(room.members.includes(req.user?._id) || room.admin.equals(req.user?._id)){
+        status = 'member'
+    }
+    else if(room.requests.includes(req.user?._id)){
+        status = 'requested'
+    }
+    else{
+        status = 'null'
+    }
+
+    return res
+    .status(200)
+    .json(new apiResponse(200, {room, status}, "Room fetch successfully"))
+})
+
+export {createRoom, updateRoomData, deleteRoom, userRooms, userRequestRooms, getRoom, getMembers, getRequests, removeAMember, requestToRoom, requestProcess, searchForRoom, getRoomStatus}

@@ -35,6 +35,11 @@
     border-radius: 5px;
     display: flex;
     flex-direction: column;
+    cursor: pointer;
+}
+
+.room:hover{
+    background-color: hsla(216, 15%, 32%, 0.15);
 }
 
 .room h1{
