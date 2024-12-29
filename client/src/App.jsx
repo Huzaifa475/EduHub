@@ -28,7 +28,7 @@ function App() {
       <Route path='/requested-rooms' element={<RequestedRooms/>}/>
       <Route path='/create' element={<Create/>}/>
       <Route path='/room/:roomId' element={<Room/>}/>
-      <Route path='/admin' element={<Admin/>}/>
+      <Route path='/admin/:roomId' element={<Admin/>}/>
       <Route path='/search/:roomId' element={<SearchRoom/>}/>
     </Routes>
   )

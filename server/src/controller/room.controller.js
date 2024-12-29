@@ -70,9 +70,9 @@ const deleteRoom = asyncHandler(async(req, res) => {
     }
 
     await Room.findByIdAndDelete(roomId)
-    await Message.DeleteMany({receiver: roomId})
-    await Task.DeleteMany({room: roomId})
-    await File.DeleteMany({room: roomId})
+    await Message.deleteMany({receiver: roomId})
+    await Task.deleteMany({room: roomId})
+    await File.deleteMany({room: roomId})
 
     return res
     .status(200)
@@ -258,6 +258,9 @@ const requestProcess = asyncHandler(async(req, res) => {
             {
                 $addToSet: {
                     members: requestId
+                },
+                $pull: {
+                    requests: requestId
                 }
             },
             {
@@ -279,7 +282,7 @@ const requestProcess = asyncHandler(async(req, res) => {
         await Room.findByIdAndUpdate(
             roomId,
             {
-                $pull: {memberId: requestId}
+                $pull: {requests: requestId}
             },
             {
                 new: true

@@ -13,12 +13,15 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useLocation } from "react-router-dom";
 import axios from 'axios';
 import './index.css'
+import { useDispatch } from 'react-redux';
+import { resetState } from '../../redux/profileSlice.js';
 
 
 function Sider() {
   const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'))
   const navigate = useNavigate()
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const handleClickSearch = () => {
     navigate('/home')
@@ -58,6 +61,7 @@ function Sider() {
       })
       toastId = toast.success(res?.data?.message, { duration: 1000 })
       localStorage.clear();
+      dispatch(resetState());
       navigate('/')
     } catch (error) {
       if (error.response) {
@@ -87,7 +91,7 @@ function Sider() {
         setAccessToken(tokenFromURL);
       }
     }
-  }, [location, accessToken])
+  }, [location, accessToken]) 
   return (
     <>
       <Divider />

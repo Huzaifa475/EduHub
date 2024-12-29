@@ -119,7 +119,7 @@ export const fetchRoomRequests = ({roomId}) => async (dispatch) => {
     }
 }
 
-export const removeAMember = ({roomId, memberId}) => async (dispatch) => {
+export const removeAMember = ({roomId, memberId, navigate = null}) => async (dispatch) => {
     const accessToken = localStorage.getItem('accessToken')
     try {
         dispatch(setLoading())
@@ -132,6 +132,9 @@ export const removeAMember = ({roomId, memberId}) => async (dispatch) => {
             }
         })
         dispatch(fetchRoomMembers({roomId}))
+        if(navigate){
+            navigate('/rooms')
+        }
     } catch (error) {
         dispatch(setError(error?.message))
         toast.error(error?.message, {duration: 1000})
@@ -178,18 +181,23 @@ export const roomStatus = ({roomId}) => async (dispatch) => {
     }
 }
 
-export const requestProcess = ({roomId, requestId}) => async (dispatch) => {
+export const requestProcess = ({roomId, requestId, accept}) => async (dispatch) => {
     const accessToken = localStorage.getItem('accessToken')
     try {
         dispatch(setLoading())
         const res = await axios({
             method: 'post',
             url: `/api/v1/rooms/request-process/${roomId}/${requestId}`,
+            data: {
+                accept
+            },
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
             }
         })
+        dispatch(fetchRoomRequests({roomId}))
+        dispatch(fetchRoomMembers({roomId}))
     } catch (error) {
         dispatch(setError(error?.message))
         toast.error(error?.message, {duration: 1000})
@@ -248,7 +256,7 @@ export const updateRoom = ({name, description, roomType, tags, roomId}) => async
     }
 }
 
-export const deleteRoom = ({roomId}) => async(dispatch) => {
+export const deleteRoom = ({roomId, navigate}) => async(dispatch) => {
     const accessToken = localStorage.getItem('accessToken')
     try {
         dispatch(setLoading())
@@ -261,6 +269,7 @@ export const deleteRoom = ({roomId}) => async(dispatch) => {
             }
         })
         toast.success(res?.data?.message, {duration: 1000})
+        navigate('/rooms')
     } catch (error) {
         dispatch(setError(error?.message))
         toast.error(error?.message, {duration: 1000})

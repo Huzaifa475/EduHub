@@ -4,12 +4,26 @@ import { useDispatch, useSelector } from 'react-redux'
 import SearchIcon from '@mui/icons-material/Search';
 import { fetchSearchRooms } from '../../../redux/roomSlice';
 import { useNavigate } from 'react-router';
+import { fetchProfile } from '../../../redux/profileSlice';
 
 function SearchContent() {
     const [prompt, setPrompt] = useState('');
     const { searchRooms, loading, error } = useSelector(state => state.room);
+    const { profile } = useSelector(state => state.profile)
     const dispatch = useDispatch()
     const navigate = useNavigate()
+
+    useEffect(() => {
+        if (!profile?._id) {
+            dispatch(fetchProfile());
+        }
+    }, [dispatch, profile?._id]);
+
+    useEffect(() => {
+        if (profile?._id) {
+            localStorage.setItem('id', profile._id);
+        }
+    }, [profile?._id]);
 
     const handleClickSearch = () => {
         dispatch(fetchSearchRooms({ prompt }))
