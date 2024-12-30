@@ -20,9 +20,6 @@ const uploadFile = asyncHandler(async(req, res) => {
         throw new apiError(501, 'Server error while uploading the file')
     }
 
-    console.log(result[0].metadata);
-    
-
     const file = await File.create({
         fileName: result[0].metadata.name,
         fileType: result[0].metadata.contentType,

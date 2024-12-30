@@ -158,7 +158,7 @@ function Room() {
                 </div>
                 <div className="file-card card">
                     <h1>File</h1>
-                    <Button><UploadFileIcon />File</Button>
+                    <Button onClick={() => navigate(`/file/${roomId}`)}><UploadFileIcon />File</Button>
                 </div>
                 <div className="task-card card">
                     <h1>Tasks</h1>

@@ -84,8 +84,6 @@ function ProfileContent() {
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        console.log(file);
-        
         if (file) {
             setSelectedFile(file);
             uploadImage(file);

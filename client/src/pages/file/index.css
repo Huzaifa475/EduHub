@@ -1,0 +1,53 @@
+
+
+.file-container{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.file-header{
+    width: 90%;
+    height: 10%;
+    color: #66b3ff;
+    border-bottom: 1px solid #66b3ff;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.files{
+    width: 90%;
+    height: 80%;
+    padding-top: 10px;
+    overflow-y: scroll;
+    color: #66b3ff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.file{
+    width: 100%;
+    height: fit-content;
+    min-height: 10%;
+    padding: 5px;
+    border-radius: 0.5rem;
+    color: #66b3ff;
+    background-color: hsla(215, 15%, 40%, 0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.file-upload{
+    width: 90%;
+    height: 10%;
+    color: #66b3ff;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    /* background-color: hsla(215, 15%, 40%, 0.15); */
+}
