@@ -22,13 +22,13 @@ const setupChat = (io) => {
 
         socket.on('send-message', async (data) => {
             try {
-                const { content, sender, receiver } = data;
+                const { content, sender, receiver, senderName } = data;
 
-                if (!content || !sender || !receiver) {
+                if (!content || !sender || !receiver || !senderName) {
                     throw new apiError(402, 'Please provide all required fields.');
                 }
 
-                const message = await Message.create({ content, sender, receiver });
+                const message = await Message.create({ content, sender, receiver, senderName });
                 chat.to(receiver).emit('new-message', message);
             } catch (error) {
                 console.error('Error sending message:', error);

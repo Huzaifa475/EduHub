@@ -154,7 +154,7 @@ function Room() {
             <div className="room-cards">
                 <div className="chat-card card">
                     <h1>Chat</h1>
-                    <Button><ChatIcon />Chat</Button>
+                    <Button onClick={() => navigate(`/chat/${roomId}`)}><ChatIcon />Chat</Button>
                 </div>
                 <div className="file-card card">
                     <h1>File</h1>

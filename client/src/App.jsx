@@ -14,6 +14,7 @@ import Room from './pages/room/Room.jsx'
 import Admin from './pages/admin/Admin.jsx'
 import SearchRoom from './pages/searchRoom/SearchRoom.jsx'
 import File from './pages/file/File.jsx'
+import Chat from './pages/chat/Chat.jsx'
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
       <Route path='/admin/:roomId' element={<Admin/>}/>
       <Route path='/search/:roomId' element={<SearchRoom/>}/>
       <Route path='/file/:roomId' element={<File/>}/>
+      <Route path='/chat/:roomId' element={<Chat/>}/>
     </Routes>
   )
 }
