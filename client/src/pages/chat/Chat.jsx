@@ -98,7 +98,7 @@ function Chat() {
                 <div key={chat._id} className={chat.sender === `${userId}` ? "message-container-sender" : "message-container-receiver"} ref={isLastMessage ? lastMessage : null}>
                   <div className="message-header">
                     <span className="sender-name">{chat?.senderName}</span>
-                    <span className="message-time">{chat.createdAt}</span>
+                    <span className="message-time">{new Date(chat?.createdAt)?.toLocaleDateString()}</span>
                   </div>
                   <div className="message-content">
                     {chat.content}
@@ -141,6 +141,8 @@ function Chat() {
           value={messageData}
           onChange={(e) => setMessageData(e.target.value)}
           onKeyDown={handleKeyDown}
+          autoSave='off'
+          autoComplete='off'
         />
         <Button sx={{ width: '5%', height: '60%' }} onClick={handleClickSend}><SendIcon /></Button>
       </div>

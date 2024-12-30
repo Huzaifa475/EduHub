@@ -71,36 +71,30 @@ const getRoomTasks = asyncHandler(async(req, res) => {
         throw new apiError(404, "Room not found")
     }
 
-    const tasks = await Task.find({room: roomId})
+    const tasks = await Task.find({room: roomId}).sort({createdAt: -1})
 
     return res
     .status(200)
     .json(new apiResponse(200, tasks, "Tasks of a room fetch successfully"))
 })
 
-const toggleTaskStatus = asyncHandler(async(req, res) => {
+const toggleTaskStatus = asyncHandler(async (req, res) => {
+    const { taskId } = req.params;
 
-    const {taskId} = req.params
-
-    if(!isValidObjectId(taskId)){
-        throw new apiError(404, "Error not found")
+    if (!isValidObjectId(taskId)) {
+        throw new apiError(404, "Task not found");
     }
 
-    await Task.findByIdAndUpdate(
-        taskId,
-        {
-            $set: {
-                isCompleted: {$not: isCompleted}
-            }
-        },
-        {
-            new: true
-        }
-    )
+    const task = await Task.findById(taskId);
+    if (!task) {
+        throw new apiError(404, "Task not found");
+    }
 
-    return res
-    .status(200)
-    .json(new apiResponse(200, "Task toggle successfully"))
-})
+    task.isCompleted = !task.isCompleted;
+    await task.save();
+
+    return res.status(200).json(new apiResponse(200, "Task toggled successfully"));
+});
+
 
 export {createTask, deleteTask, getATask, getRoomTasks, toggleTaskStatus}

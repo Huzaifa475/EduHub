@@ -1,0 +1,59 @@
+.task-container{
+    width: 100vw;
+    height: 100vh;
+    color: #66b3ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.task-header{
+    width: 98%;
+    height: 10%;
+    border-bottom: 1px solid #66b3ff;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.task-content{
+    width: 98%;
+    height: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.task-create{
+    width: 30%;
+    height: 100%;
+    padding-top: 1rem;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.task-display{
+    width: 65%;
+    height: 100%;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+
+.task{
+    width: 100%;
+    height: fit-content;
+    padding: 0.5rem;
+    background-color: hsla(215, 15%, 40%, 0.15);
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}

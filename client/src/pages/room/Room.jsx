@@ -162,7 +162,7 @@ function Room() {
                 </div>
                 <div className="task-card card">
                     <h1>Tasks</h1>
-                    <Button><AddTaskIcon />Task</Button>
+                    <Button onClick={() => navigate(`/task/${roomId}`)}><AddTaskIcon />Task</Button>
                 </div>
                 <div className="video-card card">
                     <h1>Video</h1>

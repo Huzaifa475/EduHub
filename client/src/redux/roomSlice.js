@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import toast from "react-hot-toast";
 
+axios.defaults.withCredentials = true
 export const fecthRooms = () => async(dispatch) => {
     const accessToken = localStorage.getItem('accessToken')
     try {
@@ -133,7 +134,7 @@ export const removeAMember = ({roomId, memberId, navigate = null}) => async (dis
         })
         dispatch(fetchRoomMembers({roomId}))
         if(navigate){
-            navigate('/rooms')
+            navigate('/rooms', {replace: true})
         }
     } catch (error) {
         dispatch(setError(error?.message))
@@ -269,7 +270,7 @@ export const deleteRoom = ({roomId, navigate}) => async(dispatch) => {
             }
         })
         toast.success(res?.data?.message, {duration: 1000})
-        navigate('/rooms')
+        navigate('/rooms', {replace: true})
     } catch (error) {
         dispatch(setError(error?.message))
         toast.error(error?.message, {duration: 1000})
@@ -334,7 +335,7 @@ const roomSlice = createSlice({
             state.loading = false
         },
         setError: (state, action) => {
-            state.loading = true
+            state.loading = false
             state.error = action.payload
         },
         resetState: () => initialState
