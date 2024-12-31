@@ -295,7 +295,7 @@ connections.on('connection', async socket => {
 
     const getTransport = (socketId) => {
         const [producerTransport] = transports.filter(t => t.socketId === socketId && !t.consumer);
-        return producerTransport.transport;
+        return producerTransport?.transport;
     }
 
     socket.on('transport-connect', ({ dtlsParameters }) => {

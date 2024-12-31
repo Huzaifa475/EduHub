@@ -18,6 +18,7 @@ import Task from './pages/task/Task.jsx'
 import './App.css'
 import TaskPage from './pages/taskPage/TaskPage.jsx'
 import RoomUpdate from './pages/roomUpdate/RoomUpdate.jsx'
+import VideoCall from './pages/videoCall/VideoCall.jsx'
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
       <Route path='/task/:roomId' element={<Task/>}/>
       <Route path='/task-page/:taskId' element={<TaskPage/>}/>
       <Route path='/room-update/:roomId' element={<RoomUpdate/>}/>
+      <Route path='/video-call/:roomId' element={<VideoCall/>}/>
     </Routes>
   )
 }

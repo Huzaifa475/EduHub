@@ -172,7 +172,7 @@ function Room() {
                 </div>
                 <div className="video-card card">
                     <h1>Video Call</h1>
-                    <Button><VideocamIcon />Video Call</Button>
+                    <Button onClick={() => navigate(`/video-call/${roomId}`)}><VideocamIcon />Video Call</Button>
                 </div>
             </div>
             <Toaster/>
