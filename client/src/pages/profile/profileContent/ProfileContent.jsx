@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import './index.css'
 import { fetchProfile, updateProfile } from '../../../redux/profileSlice';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -158,6 +158,7 @@ function ProfileContent() {
                     </div>
                 </div>
             </div>
+            <Toaster/>
         </div>
     )
 }

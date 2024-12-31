@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteNotification, deleteNotifications, fetchNotifications } from '../../../redux/notificationSlice';
 import { Skeleton, Stack } from '@mui/material';
 import moment from 'moment';
+import { Toaster } from 'react-hot-toast';
 
 function NotificationContent() {
     const { notification, loading, error } = useSelector(state => state.notification)
@@ -93,6 +94,7 @@ function NotificationContent() {
                         )
                 }
             </div>
+            <Toaster/>
         </div>
     )
 }

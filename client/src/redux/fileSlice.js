@@ -34,6 +34,7 @@ export const deleteFile = ({roomId, fileId}) => async(dispatch) => {
             }
         })
         dispatch(fetchFiles({roomId}))
+        toast.success(res?.data?.message, {duration: 1000})
     } catch (error) {
         dispatch(setError(error?.message))
         toast.error(error?.message, {duration: 1000})

@@ -1,38 +1,40 @@
 import React, { useState } from 'react'
-import './index.css'
-import { Autocomplete, Chip, Fab, FormControl, FormControlLabel, FormLabel, InputAdornment, InputLabel, OutlinedInput, Radio, RadioGroup, TextField, Typography } from '@mui/material'
-import AddIcon from '@mui/icons-material/Add';
 import { useDispatch } from 'react-redux';
-import { createRoom } from '../../../redux/roomSlice';
+import { updateRoom } from '../../redux/roomSlice';
+import { useParams } from 'react-router';
+import { Autocomplete, Chip, Fab, FormControl, FormControlLabel, InputAdornment, OutlinedInput, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import { Toaster } from 'react-hot-toast';
+import UpdateIcon from '@mui/icons-material/Update';
+import './index.css';
 
-function CreatePage() {
-    const [tags, setTags] = useState([]);
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [roomType, setRoomType] = useState('public');
-    const dispatch = useDispatch()
+function RoomUpdate() {
+  const [tags, setTags] = useState([]);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [roomType, setRoomType] = useState('public');
+  const dispatch = useDispatch()
+  const {roomId} = useParams()
 
-    const handleClickCreate = () => {
-        dispatch(createRoom({name, description, roomType, tags}));
-        setTags('')
-        setName('')
-        setDescription('')
-        setRoomType('public')
-    }
+  const handleClickUpdate = () => {
+      dispatch(updateRoom({name, description, roomType, tags, roomId}));
+      setTags('')
+      setName('')
+      setDescription('')
+      setRoomType('public')
+  }
 
-    const handleRoomTypeChange = (event) => {
-        setRoomType(event.target.value);
-    };
-
-    return (
-        <div className='create-container'>
-
-            <div className="create-header">
-                <h1>Create new room</h1>
+  const handleRoomTypeChange = (event) => {
+      setRoomType(event.target.value);
+  };
+  return (
+    <div className="room-update-container">
+        
+        <div className="room-update-header">
+                <h1>Update Room Information</h1>
             </div>
 
-            <div className="create-content">
+            <div className="room-update-content">
                 <FormControl fullWidth sx={{ width: '98%' }}>
                     <OutlinedInput
                         startAdornment={
@@ -42,7 +44,7 @@ function CreatePage() {
                         }
                         sx={{
                             bgcolor: 'hsla(215, 15%, 40%, 0.15)',
-                            width: '98%',
+                            width: '100%',
                             '& .MuiOutlinedInput-input': {
                                 color: '#66b3ff'
                             },
@@ -63,7 +65,7 @@ function CreatePage() {
                         }
                         sx={{
                             bgcolor: 'hsla(215, 15%, 40%, 0.15)',
-                            width: '98%',
+                            width: '100%',
                             '& .MuiOutlinedInput-input': {
                                 color: '#66b3ff'
                             },
@@ -98,7 +100,7 @@ function CreatePage() {
                             variant="outlined"
                             label="Tags"
                             sx={{
-                                width: '98%',
+                                width: '100%',
                                 bgcolor: 'hsla(215, 15%, 40%, 0.15)',
                                 '& .MuiInputLabel-root': { color: '#66b3ff' },
                                 '& .MuiOutlinedInput-root': {
@@ -133,14 +135,15 @@ function CreatePage() {
                     </RadioGroup>
                 </FormControl>
 
-                <Fab color="primary" aria-label="add" sx={{justifySelf: 'flex-end', alignSelf: 'flex-end'}} onClick={handleClickCreate}>
-                    <AddIcon />
+                <Fab color="primary" aria-label="add" sx={{justifySelf: 'flex-end', alignSelf: 'flex-end', marginRight: '2%'}} onClick={handleClickUpdate}>
+                    <UpdateIcon />
                 </Fab>
             </div>
 
             <Toaster/>
-        </div>
-    )
+
+    </div>
+  )
 }
 
-export default CreatePage
+export default RoomUpdate

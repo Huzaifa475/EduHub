@@ -9,6 +9,7 @@ import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import './index.css'
+import { Toaster } from 'react-hot-toast'
 
 function Task() {
     const [title, setTitle] = useState('')
@@ -208,7 +209,7 @@ function Task() {
                 </div>
 
             </div>
-
+            <Toaster/>
         </div>
     )
 }

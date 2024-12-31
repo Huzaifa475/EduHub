@@ -43,6 +43,7 @@ export const createTask = ({creator, title, tasks, isCompleted, room}) => async(
             }
         })
         dispatch(fetchTasks({roomId}))
+        toast.success(res?.data?.message, {duration: 1000})
     } catch (error) {
         dispatch(setError(error?.message))
         toast.error(error?.message, {duration: 1000})
@@ -62,6 +63,7 @@ export const deleteTask = ({taskId, roomId}) => async(dispatch) => {
             }
         })
         dispatch(fetchTasks({roomId}))
+        toast.success(res?.data?.message, {duration: 1000})
     } catch (error) {
         dispatch(setError(error?.message))
         toast.error(error?.message, {duration: 1000})
@@ -81,6 +83,7 @@ export const toggleTask = ({taskId}) => async(dispatch) => {
             }
         })
         dispatch(fetchTask({taskId}))
+        toast.success(res?.data?.message, {duration: 1000})
     } catch (error) {
         dispatch(setError(error?.message))
         toast.error(error?.message, {duration: 1000})

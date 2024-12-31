@@ -43,7 +43,6 @@ export const updateProfile = ({userName, email}) => async (dispatch) => {
         toast.success(res?.data?.message)
     } catch (error) {
         dispatch(setError(error?.response?.data?.message))
-        // toast.error(error?.response?.data?.message)
         toast.error(error?.message)
     }
 }

@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { deleteRoom, fetchRoomMembers, fetchRoomRequests, removeAMember, requestProcess } from '../../redux/roomSlice';
+import { Toaster } from 'react-hot-toast';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -247,6 +248,8 @@ function Admin() {
                 </div>
 
             </div>
+
+            <Toaster/>
         </div>
     )
 }

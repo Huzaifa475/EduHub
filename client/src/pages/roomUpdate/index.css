@@ -1,0 +1,31 @@
+
+.room-update-container{
+    width: 100vw;
+    height: 100vh;
+    color: #66b3ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.room-update-header{
+    width: 98%;
+    height: 20%;
+    padding-left: 1rem;
+    border-bottom: 1px solid #66b3ff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.room-update-content{
+    width: 98%;
+    height: 80%;
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+    gap: 1rem;
+}

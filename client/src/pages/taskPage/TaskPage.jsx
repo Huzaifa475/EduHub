@@ -16,6 +16,7 @@ import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteTask, fetchTask, toggleTask } from "../../redux/taskSlice";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Toaster } from "react-hot-toast";
 
 function TaskPage() {
     const { task, loading, error } = useSelector(state => state.task)
@@ -122,6 +123,7 @@ function TaskPage() {
                     </CardContent>
                 </Card>
             </Box>
+            <Toaster/>
         </div>
     )
 }

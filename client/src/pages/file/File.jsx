@@ -4,11 +4,11 @@ import DownloadIcon from '@mui/icons-material/Download';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Skeleton, Slide, Stack } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteFile, fetchFiles } from '../../redux/fileSlice';
 import { useParams } from 'react-router';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -97,7 +97,7 @@ function File() {
                 throw new Error('Failed to upload image', errorData);
             }
             toast.success(response.statusText)
-            dispatch(fetchFiles({roomId}))
+            dispatch(fetchFiles({ roomId }))
         } catch (error) {
             console.error('Error uploading image:', error);
         }
@@ -110,6 +110,43 @@ function File() {
             uploadFile(file);
         }
     };
+
+    if (loading) {
+        return (
+            <div className="file-container">
+
+                <div className="file-header">
+                    <h1>File Upload and Download</h1>
+                </div>
+
+                <Stack className="files">
+                    <Skeleton sx={{backgroundColor: 'hsla(215, 15%, 40%, 0.15)', height: '100px', width: '100%'}}/>
+                    <Skeleton sx={{backgroundColor: 'hsla(215, 15%, 40%, 0.15)', height: '100px', width: '100%'}}/>
+                    <Skeleton sx={{backgroundColor: 'hsla(215, 15%, 40%, 0.15)', height: '100px', width: '100%'}}/>
+                    <Skeleton sx={{backgroundColor: 'hsla(215, 15%, 40%, 0.15)', height: '100px', width: '100%'}}/>
+                    <Skeleton sx={{backgroundColor: 'hsla(215, 15%, 40%, 0.15)', height: '100px', width: '100%'}}/>
+                </Stack>
+
+                <div className="file-upload">
+                    <Button
+                        component="label"
+                        role={undefined}
+                        variant="contained"
+                        tabIndex={-1}
+                        startIcon={<CloudUploadIcon />}
+                    >
+                        Upload file
+                        <VisuallyHiddenInput
+                            type="file"
+                            onChange={handleFileChange}
+                            multiple
+                        />
+                    </Button>
+                </div>
+                <Toaster />
+            </div>
+        )
+    }
     return (
         <div className="file-container">
 
@@ -186,7 +223,7 @@ function File() {
                     />
                 </Button>
             </div>
-
+            <Toaster />
         </div>
     )
 }

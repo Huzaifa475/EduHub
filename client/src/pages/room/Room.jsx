@@ -7,11 +7,13 @@ import ChatIcon from '@mui/icons-material/Chat';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import AddTaskIcon from '@mui/icons-material/AddTask';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Skeleton, Slide, Stack } from '@mui/material'
+import UpdateIcon from '@mui/icons-material/Update';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Skeleton, Slide, Stack } from '@mui/material'
 import DialogContentText from '@mui/material/DialogContentText';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRoom, removeAMember } from '../../redux/roomSlice';
+import { Toaster } from 'react-hot-toast';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props}/>;
@@ -127,7 +129,11 @@ function Room() {
                 <div className="room-button">
                     {
                         userId === room.admin ?
-                        <Button onClick={() => navigate(`/admin/${roomId}`)}><DashboardIcon />Admin Dashboard</Button>
+                        <>
+                            <Button onClick={() => navigate(`/admin/${roomId}`)}><DashboardIcon />Admin Dashboard</Button>
+                            <Divider/>
+                            <Button onClick={() => navigate(`/room-update/${roomId}`)}><UpdateIcon/>Update Room</Button>
+                        </>
                         :
                         <Button onClick={handleClickDialog}><ExitToAppIcon />Leave Room</Button>
                     }
@@ -165,10 +171,11 @@ function Room() {
                     <Button onClick={() => navigate(`/task/${roomId}`)}><AddTaskIcon />Task</Button>
                 </div>
                 <div className="video-card card">
-                    <h1>Video</h1>
-                    <Button><VideocamIcon />Video</Button>
+                    <h1>Video Call</h1>
+                    <Button><VideocamIcon />Video Call</Button>
                 </div>
             </div>
+            <Toaster/>
         </div>
     )
 }

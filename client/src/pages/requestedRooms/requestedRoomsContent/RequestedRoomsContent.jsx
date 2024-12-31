@@ -3,6 +3,7 @@ import './index.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { Skeleton, Stack } from '@mui/material'
 import { fetchRequestedRooms } from '../../../redux/roomSlice'
+import { Toaster } from 'react-hot-toast'
 
 function RequestedRoomsContent() {
     const { requestedRooms, loading, error } = useSelector(state => state.room)
@@ -75,7 +76,7 @@ function RequestedRoomsContent() {
                 }
 
             </div>
-
+            <Toaster/>
         </div>
     )
 }

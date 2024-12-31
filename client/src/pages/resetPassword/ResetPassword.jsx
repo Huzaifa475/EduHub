@@ -8,7 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import { Box, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router';
 
@@ -177,6 +177,7 @@ function ResetPassword() {
                 </LoadingButton>
 
             </Box>
+            <Toaster/>
         </div>
     )
 }

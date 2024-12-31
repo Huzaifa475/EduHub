@@ -236,7 +236,7 @@ export const updateRoom = ({name, description, roomType, tags, roomId}) => async
     if(name) updateFields.name = name
     if(description) updateFields.description = description
     if(roomType) updateFields.publicOrPrivate = roomType
-    if(tags) updateFields.tags = tags
+    if(tags.length > 0) updateFields.tags = tags
     try {
         dispatch(setLoading())
         const res = await axios({
