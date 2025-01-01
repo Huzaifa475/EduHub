@@ -152,7 +152,7 @@ connections.on('connection', async socket => {
             }
         }
 
-        const rtpCapabilities = router1.rtpCapabilities;
+        const rtpCapabilities = router1?.rtpCapabilities;
 
         callback({ rtpCapabilities })
     });
@@ -165,10 +165,10 @@ connections.on('connection', async socket => {
             peers = rooms[roomName].peers || [];
         }
         else {
-            router1 = await worker.createRouter({ mediaCodecs });
+            router1 = await worker?.createRouter({ mediaCodecs });
         }
 
-        console.log('Router created with id:', router1.id);
+        console.log('Router created with id:', router1?.id);
         console.log('Peers:', peers.length);
 
         rooms[roomName] = {
@@ -300,30 +300,17 @@ connections.on('connection', async socket => {
     }
 
     const getTransport = (socketId) => {
-        // try {
-        //     const [producerTransport] = transports.filter(t => t.socketId === socketId && !t.consumer);
-        //     return producerTransport.transport;
-        // } catch (error) {
-        //     console.log('Error getting transport:', error);
-        // }
         try {
             const transportInfo = transports.find(
                 (t) => t.socketId === socketId && !t.consumer
             );
-            return transportInfo ? transportInfo : null; // Return the full transport object
+            return transportInfo ? transportInfo : null; 
         } catch (error) {
             console.log('Error getting transport:', error);
         }
     }
 
     socket.on('transport-connect', ({ dtlsParameters }) => {
-        // try {
-
-        //     console.log('DTLS PARAMS... ', dtlsParameters);
-        //     getTransport(socket.id).connect({ dtlsParameters });
-        // } catch (error) {
-        //     console.log('Error connecting transport:', error);
-        // }
         const transportInfo = getTransport(socket.id);
 
         if (!transportInfo) {
@@ -341,32 +328,6 @@ connections.on('connection', async socket => {
         transportInfo.connected = true;
     })
 
-    // socket.on('transport-produce', async ({ kind, rtpParameters, appData }, callback) => {
-    //     try {
-    //         const producer = await getTransport(socket.id).produce({
-    //             kind,
-    //             rtpParameters
-    //         })
-
-    //         const { roomName } = peers[socket.id];
-
-    //         addProducer(producer, roomName);
-
-    //         informConsumers(roomName, socket.id, producer.id);
-
-    //         producer.on('transportclose', () => {
-    //             console.log('transport for this producer closed');
-    //             producer.close()
-    //         })
-
-    //         callback({
-    //             id: producer.id,
-    //             producersExist: producers.length > 1 ? true : false
-    //         })
-    //     } catch (error) {
-    //         console.log('Error producing:', error);
-    //     }
-    // })
     socket.on('transport-produce', async ({ kind, rtpParameters, appData }, callback) => {
         try {
             const transportInfo = getTransport(socket.id);
@@ -382,32 +343,29 @@ connections.on('connection', async socket => {
             const producer = await transport.produce({
                 kind,
                 rtpParameters,
-                appData, // You can pass additional custom data here
+                appData,
             });
     
             const { roomName } = peers[socket.id];
     
             addProducer(producer, roomName);
     
-            // Notify consumers in the room about the new producer
             informConsumers(roomName, socket.id, producer.id);
-    
-            // Handle transport close event
+
             producer.on('transportclose', () => {
                 console.log('Transport for this producer closed');
                 producer.close();
             });
     
-            // Send back producer information
             callback({
                 id: producer.id,
-                producersExist: producers.length > 1, // Check if other producers exist
+                producersExist: producers.length > 1, 
             });
     
             console.log(`Producer created with ID: ${producer.id}`);
         } catch (error) {
             console.error('Error producing:', error);
-            callback({ error: error.message }); // Return the error to the client
+            callback({ error: error.message }); 
         }
     });
     

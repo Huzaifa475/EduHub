@@ -1,0 +1,54 @@
+
+
+.videoCall-container{
+    width: 100vw;
+    height: 100vh;
+    color: #66b3ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.videoCall-header{
+    width: 90%;
+    height: 10%;
+    border-bottom: 1px solid #66b3ff;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.videoCall-content{
+    width: 90%;
+    height: 90%;
+    overflow-y: scroll;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    gap: 2px;
+}
+
+.videoCall-local{
+    width: 45%;
+    height: 100%;
+    border: 1px solid #66b3ff;
+    display: flex;
+    flex-direction: column;
+}
+
+.videoContainer{
+    width: 55%;
+    height: 100%;
+    border: 1px solid #66b3ff;
+    display: flex;
+    gap: 2px;
+}
+
+
+.videoContainer video{
+    width: 150px !important;
+    height: 150px !important;
+}
+
+/* ---------------------------------------------------------- */

@@ -1,25 +1,28 @@
 import React, { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import { Device } from 'mediasoup-client';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import './index.css'
+import { Button } from '@mui/material';
 
 function App() {
-  const {roomId} = useParams()
+  const { roomId } = useParams()
+  const navigate = useNavigate()
+  const userName = localStorage.getItem('userName')
   const localVideoRef = useRef(null);
   let stream;
   let rtpCapabilities;
   let device;
   let producerTransport;
   let consumerTransports = [];
-  let audioProducer;
   let videoProducer;
-  let consumer;
 
   const roomName = roomId;
 
   const socket = io('http://localhost:3000/videoCall', {
     transports: ['websocket'],
-    // secure: true,
+    secure: true,
     withCredentials: true,
   });
 
@@ -69,10 +72,10 @@ function App() {
   const getLocalStream = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: false,
+        audio: true,
         video: {
-          width: { min: 640, max: 1920 },
-          height: { min: 400, max: 1080 },
+          width: { min: 500, max: 500 },
+          height: { min: 420, max: 420 },
         },
       });
       streamSuccess(stream);
@@ -272,18 +275,84 @@ function App() {
       if (stream) {
         stream.getTracks().forEach((track) => track.stop());
       }
+
+      consumerTransports.forEach(({ consumerTransport, consumer }) => {
+        consumerTransport.close();
+        consumer.close();
+      });
+      consumerTransports = [];
+
+      if (producerTransport) {
+        producerTransport.close();
+      }
+
+      if (videoProducer) {
+        videoProducer.close();
+      }
+
+      if (socket) {
+        socket.disconnect();
+      }
+
+      const videoContainer = document.getElementById('videoContainer');
+      if (videoContainer) {
+        while (videoContainer.firstChild) {
+          videoContainer.removeChild(videoContainer.firstChild);
+        }
+      }
+
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = null;
+      }
     };
   }, [stream]);
 
-  return (
-    <div>
-      <p>Local Video</p>
-      <video ref={localVideoRef} autoPlay></video>
+  const handleLeave = () => {
+    if (stream) {
+      stream.getTracks().forEach((track) => {
+        track.stop();
+      });
+    }
+    consumerTransports.forEach(({ consumerTransport, consumer }) => {
+      consumerTransport.close();
+      consumer.close();
+    });
+    consumerTransports = [];
+    if (producerTransport) {
+      producerTransport.close();
+    }
+    if (videoProducer) {
+      videoProducer.close();
+    }
+    if (socket) {
+      socket.disconnect();
+    }
+    if (localVideoRef.current) {
+      localVideoRef.current.srcObject = null;
+    }
+    navigate(`/room/${roomId}`);
+  };
 
-      <p>Remote Video</p>
-      <div id='videoContainer'>
+  return (
+    <div className='videoCall-container'>
+
+      <div className="videoCall-haeder">
+        <h1>Video Call</h1>
+        <Button onClick={handleLeave}><ExitToAppIcon />Leave</Button>
+      </div>
+
+      <div className="videoCall-content">
+
+        <div className="videoCall-local">
+          <video ref={localVideoRef} autoPlay></video>
+          <h1>{userName}</h1>
+        </div>
+
+        <div id='videoContainer'>
+        </div>
 
       </div>
+
     </div>
   );
 }
