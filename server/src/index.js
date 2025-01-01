@@ -115,28 +115,25 @@ connections.on('connection', async socket => {
     }
 
     socket.on('disconnect', () => {
-        console.log('peer disconnected');
-
-        consumers = removeItems(consumers, socket.id, 'consumer');
-        producers = removeItems(producers, socket.id, 'producer');
-        transports = removeItems(transports, socket.id, 'transport');
-
-        let roomName
         try {
-            roomName = peers[socket.id].roomName;
-        } catch (error) {
-            console.log(`some problem with the room name`);
-        }
+            console.log('peer disconnected');
 
-        delete peers[socket.id];
+            consumers = removeItems(consumers, socket.id, 'consumer');
+            producers = removeItems(producers, socket.id, 'producer');
+            transports = removeItems(transports, socket.id, 'transport');
 
-        try {
-            rooms[roomName] = {
-                router: rooms[roomName].router,
-                peers: rooms[roomName].peers.filter(socketId => socketId !== socket.id)
+            const roomName = peers[socket.id]?.roomName;
+
+            delete peers[socket.id];
+
+            if (!roomName) {
+                rooms[roomName] = {
+                    router: rooms[roomName].router,
+                    peers: rooms[roomName].peers.filter(socketId => socketId !== socket.id)
+                }
             }
         } catch (error) {
-            console.log(`some problem with the room name`);
+            console.log('Error on disconnect:', error);
         }
     });
 
@@ -216,7 +213,8 @@ connections.on('connection', async socket => {
                 socketId: socket.id,
                 transport,
                 roomName,
-                consumer
+                consumer,
+                connected: false
             }
         ]
 
@@ -268,63 +266,151 @@ connections.on('connection', async socket => {
     }
 
     socket.on('getProducers', callback => {
-        const roomName = peers[socket.id].roomName;
+        try {
+            const roomName = peers[socket.id].roomName;
 
-        let producersList = []
+            let producersList = []
 
-        producers.forEach(p => {
-            if (p.roomName === roomName && p.socketId !== socket.id) {
-                producersList = [...producersList, p.producer.id]
-            }
-        })
+            producers.forEach(p => {
+                if (p.roomName === roomName && p.socketId !== socket.id) {
+                    producersList = [...producersList, p.producer.id]
+                }
+            })
 
-        callback(producersList)
+            callback(producersList)
+        } catch (error) {
+            console.log('Error getting producers:', error);
+        }
     })
 
     const informConsumers = (roomName, socketId, producerId) => {
-        console.log(`Informing consumers of new producer ${roomName} ${socketId} ${producerId}`);
+        try {
+            console.log(`Informing consumers of new producer ${roomName} ${socketId} ${producerId}`);
 
-        producers.forEach(p => {
-            if (p.roomName === roomName && p.socketId !== socketId) {
-                const producerSocket = peers[p.socketId].socket;
+            producers.forEach(p => {
+                if (p.roomName === roomName && p.socketId !== socketId) {
+                    const producerSocket = peers[p.socketId].socket;
 
-                producerSocket.emit('new-producer', { producerId });
-            }
-        })
+                    producerSocket.emit('new-producer', { producerId });
+                }
+            })
+        } catch (error) {
+            console.log('Error informing consumers:', error);
+        }
     }
 
     const getTransport = (socketId) => {
-        const [producerTransport] = transports.filter(t => t.socketId === socketId && !t.consumer);
-        return producerTransport?.transport;
+        // try {
+        //     const [producerTransport] = transports.filter(t => t.socketId === socketId && !t.consumer);
+        //     return producerTransport.transport;
+        // } catch (error) {
+        //     console.log('Error getting transport:', error);
+        // }
+        try {
+            const transportInfo = transports.find(
+                (t) => t.socketId === socketId && !t.consumer
+            );
+            return transportInfo ? transportInfo : null; // Return the full transport object
+        } catch (error) {
+            console.log('Error getting transport:', error);
+        }
     }
 
     socket.on('transport-connect', ({ dtlsParameters }) => {
+        // try {
+
+        //     console.log('DTLS PARAMS... ', dtlsParameters);
+        //     getTransport(socket.id).connect({ dtlsParameters });
+        // } catch (error) {
+        //     console.log('Error connecting transport:', error);
+        // }
+        const transportInfo = getTransport(socket.id);
+
+        if (!transportInfo) {
+            console.warn('Transport not found for socket:', socket.id);
+            return;
+        }
+
+        if (transportInfo.connected) {
+            console.warn('Transport already connected');
+            return;
+        }
+
         console.log('DTLS PARAMS... ', dtlsParameters);
-        getTransport(socket.id).connect({ dtlsParameters });
+        transportInfo.transport.connect({ dtlsParameters });
+        transportInfo.connected = true;
     })
 
+    // socket.on('transport-produce', async ({ kind, rtpParameters, appData }, callback) => {
+    //     try {
+    //         const producer = await getTransport(socket.id).produce({
+    //             kind,
+    //             rtpParameters
+    //         })
+
+    //         const { roomName } = peers[socket.id];
+
+    //         addProducer(producer, roomName);
+
+    //         informConsumers(roomName, socket.id, producer.id);
+
+    //         producer.on('transportclose', () => {
+    //             console.log('transport for this producer closed');
+    //             producer.close()
+    //         })
+
+    //         callback({
+    //             id: producer.id,
+    //             producersExist: producers.length > 1 ? true : false
+    //         })
+    //     } catch (error) {
+    //         console.log('Error producing:', error);
+    //     }
+    // })
     socket.on('transport-produce', async ({ kind, rtpParameters, appData }, callback) => {
-        const producer = await getTransport(socket.id).produce({
-            kind,
-            rtpParameters
-        })
-
-        const { roomName } = peers[socket.id];
-
-        addProducer(producer, roomName);
-
-        informConsumers(roomName, socket.id, producer.id);
-
-        producer.on('transportclose', () => {
-            console.log('transport for this producer closed');
-            producer.close()
-        })
-
-        callback({
-            id: producer.id,
-            producersExist: producers.length > 1 ? true : false
-        })
-    })
+        try {
+            const transportInfo = getTransport(socket.id);
+            if (!transportInfo) {
+                console.warn(`Transport not found for socket: ${socket.id}`);
+                return callback({ error: 'Transport not found' });
+            }
+    
+            const transport = transportInfo.transport;
+    
+            console.log(`Creating producer for kind: ${kind}, appData:`, appData);
+    
+            const producer = await transport.produce({
+                kind,
+                rtpParameters,
+                appData, // You can pass additional custom data here
+            });
+    
+            const { roomName } = peers[socket.id];
+    
+            addProducer(producer, roomName);
+    
+            // Notify consumers in the room about the new producer
+            informConsumers(roomName, socket.id, producer.id);
+    
+            // Handle transport close event
+            producer.on('transportclose', () => {
+                console.log('Transport for this producer closed');
+                producer.close();
+            });
+    
+            // Send back producer information
+            callback({
+                id: producer.id,
+                producersExist: producers.length > 1, // Check if other producers exist
+            });
+    
+            console.log(`Producer created with ID: ${producer.id}`);
+        } catch (error) {
+            console.error('Error producing:', error);
+            callback({ error: error.message }); // Return the error to the client
+        }
+    });
+    
 
     socket.on('transport-recv-connect', async ({ dtlsParameters, serverConsumerTransportId }) => {
         try {
@@ -391,9 +477,13 @@ connections.on('connection', async socket => {
     })
 
     socket.on('consumer-resume', async ({ serverConsumerId }) => {
-        console.log('consumer resume');
-        const { consumer } = consumers.find(c => c.consumer.id === serverConsumerId);
-        await consumer.resume()
+        try {
+            console.log('consumer resume');
+            const { consumer } = consumers.find(c => c.consumer.id === serverConsumerId);
+            await consumer.resume()
+        } catch (error) {
+            console.log('Error resuming consumer:', error);
+        }
     })
 });
 
