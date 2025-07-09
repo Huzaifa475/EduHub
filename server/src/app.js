@@ -42,7 +42,12 @@ app.use("/api/v1/notifications", notificationRouter);
 app.use("/api/v1/files", fileRouter);
 app.use("/api/v1/tasks", taskRouter);
 
+app.get('/', (req, res) => {
+    res.status(200).json({ success: true, message: 'EduHub API is running.' });
+});
+
 app.use((req, res, next) => {
+    console.log(`404 - Not Found: ${req.path}`);
     const error = new apiError(404, "Error Occured");
     next(error);
 });
@@ -54,10 +59,6 @@ app.use((err, req, res, next) => {
         message: err.message || 'Internal server error',
         statusCode: statusCode
     })
-})
-
-app.use('/', () => {
-    console.log('Server is running');
 })
 
 export default app;
