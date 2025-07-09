@@ -73,7 +73,7 @@ function Register() {
     const handleGoogle = async() => {
         setGoogleLoading(true);
         try {
-            window.location.href = 'http://localhost:3000/api/v1/users/google-login'
+            window.location.href = 'https://eduhub-aj7z.onrender.com/api/v1/users/google-login'
         } catch (error) {
             if (error.response) {
                 if (error.response?.data?.message)
