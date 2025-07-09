@@ -11,9 +11,6 @@ export default defineConfig({
         rewrite: path => path.replace(/^\/api/, '')
       }
     },
-    // hmr: {
-    //   clientPort: 443, 
-    // },
   },
   build: {
     chunkSizeWarningLimit: 500, 

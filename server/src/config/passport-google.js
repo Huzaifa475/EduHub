@@ -15,20 +15,44 @@ passport.use(
             try {
                 let user = await User.findOne({googleId: profile.id})
 
-                if(!user){
+                // if(!user){
 
-                    const googleUser = {
-                        id: profile.id,
-                        displayName: profile.name.givenName || profile.displayName,
-                        email: profile.emails[0].value
+                //     const googleUser = {
+                //         id: profile.id,
+                //         displayName: profile.name.givenName || profile.displayName,
+                //         email: profile.emails[0].value
+                //     }
+
+                //     user = await User.create({
+                //         userName: googleUser.displayName,
+                //         isGoogleUser: true,
+                //         googleId: googleUser.id,
+                //         email: googleUser.email
+                //     })
+                // }
+                if (!user) {
+                    // Check if user exists with same email but no googleId
+                    const existingEmailUser = await User.findOne({ email: profile.emails[0].value });
+                
+                    if (existingEmailUser) {
+                        // Update the user to now be linked to Google
+                        existingEmailUser.googleId = profile.id;
+                        existingEmailUser.isGoogleUser = true;
+                        user = await existingEmailUser.save();
+                    } else {
+                        const googleUser = {
+                            id: profile.id,
+                            displayName: profile.name.givenName || profile.displayName,
+                            email: profile.emails[0].value
+                        };
+                
+                        user = await User.create({
+                            userName: googleUser.displayName,
+                            isGoogleUser: true,
+                            googleId: googleUser.id,
+                            email: googleUser.email
+                        });
                     }
-
-                    user = await User.create({
-                        userName: googleUser.displayName,
-                        isGoogleUser: true,
-                        googleId: googleUser.id,
-                        email: googleUser.email
-                    })
                 }
 
                 const tokens = await generateAccessRefreshToken(user?._id)
