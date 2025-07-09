@@ -42,9 +42,9 @@ router.get(
 
             res.cookie("accessToken", tokens.accessToken, options)
             res.cookie("refreshToken", tokens.refreshToken, options)
-            res.redirect(`http://localhost:5173/home?login=${user.userName}&accessToken=${tokens.accessToken}`)
+            res.redirect(`https://eduhub-client.onrender.com/home?login=${user.userName}&accessToken=${tokens.accessToken}`)
         } catch (error) {
-            res.redirect("http://localhost:5173")
+            res.redirect("https://eduhub-client.onrender.com")
         }
     }
 );

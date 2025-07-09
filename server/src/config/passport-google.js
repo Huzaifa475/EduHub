@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 passport.use(
     new GoogleStrategy(
         {
-            callbackURL: "http://localhost:3000/api/v1/users/google-login/callback",
+            callbackURL: "https://eduhub-aj7z.onrender.com/api/v1/users/google-login/callback",
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET
         },
