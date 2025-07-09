@@ -188,7 +188,7 @@ function Login() {
         >
           Log In
         </LoadingButton>
-        <LoadingButton
+        {/* <LoadingButton
           loading={googleLoading}
           variant="outlined"
           onClick={handleGoogle}
@@ -200,7 +200,7 @@ function Login() {
           }}
         >
           Continue with Google
-        </LoadingButton>
+        </LoadingButton> */}
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
           <Typography variant="body2" sx={{ color: '#666' }}>
             Don't Have an Account?

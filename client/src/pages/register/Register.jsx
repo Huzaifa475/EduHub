@@ -191,7 +191,7 @@ function Register() {
                 >
                     Sign Up
                 </LoadingButton>
-                <LoadingButton
+                {/* <LoadingButton
                     loading={googleLoading}
                     variant="outlined"
                     onClick={handleGoogle}
@@ -203,7 +203,7 @@ function Register() {
                     }}
                 >
                     Continue with Google
-                </LoadingButton>
+                </LoadingButton> */}
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
                     <Typography variant="body2" sx={{ color: '#666' }}>
                         Already have an account?
