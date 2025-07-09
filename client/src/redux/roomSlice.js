@@ -5,6 +5,9 @@ import toast from "react-hot-toast";
 axios.defaults.withCredentials = true
 export const fecthRooms = () => async(dispatch) => {
     const accessToken = localStorage.getItem('accessToken')
+    console.log('====================================');
+    console.log('accessToken', accessToken);
+    console.log('====================================');
     try {
         dispatch(setLoading())
         const res = await axios({
@@ -13,7 +16,8 @@ export const fecthRooms = () => async(dispatch) => {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
-            }
+            },
+            withCredentials: true
         })
         dispatch(setRooms(res?.data?.data))
     } catch (error) {
