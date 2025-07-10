@@ -22,7 +22,7 @@ function Chat() {
   const [openDelete, setOpenDelete] = useState(false)
 
   useEffect(() => {
-    const newSocket = io('http://localhost:3000/chat', {
+    const newSocket = io('https://eduhub-aj7z.onrender.com/chat', {
       transports: ['websocket'],
       secure: true
     })
