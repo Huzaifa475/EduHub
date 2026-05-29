@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer'
+import apiError from './apiError.js'
 
 export const sendMail = async ({email, subject, message}) => {
     const auth = nodemailer.createTransport({
@@ -20,8 +21,9 @@ export const sendMail = async ({email, subject, message}) => {
 
     auth.sendMail(receiver, (error, emailResponse) => {
         if(error)
-            throw error;
+            throw new apiError(500, 'Server error');
         console.log('success!');
-        response.end();
+        console.log(emailResponse);
+        console.log(receiver);
     })
 }

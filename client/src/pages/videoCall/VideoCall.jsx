@@ -20,7 +20,7 @@ function App() {
 
   const roomName = roomId;
 
-  const socket = io('http://localhost:3000/videoCall', {
+  const socket = io('https://eduhub-aj7z.onrender.com/videoCall', {
     transports: ['websocket'],
     secure: true,
     withCredentials: true,

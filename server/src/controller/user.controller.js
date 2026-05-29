@@ -3,7 +3,7 @@ import apiResponse from '../util/apiResponse.js';
 import apiError from '../util/apiError.js';
 import asyncHandler from '../util/asyncHandler.js';
 import { sendMail } from '../util/nodeMailer.js';
-import uploadOnCloudinary from "../util/cloudinary.js";
+import {uploadOnCloudinary} from "../util/cloudinary.js";
 import crypto from 'crypto';
 
 const generateAccessRefreshToken = async (userId) => {
@@ -158,11 +158,15 @@ const forgotPassword = asyncHandler(async(req, res) => {
 
     const user = await User.findOne({email})
 
+    if (!user) {
+        throw new apiError(404, "User not found");
+    }
+
     const resetToken = await user.createResetPasswordToken()
 
     await user.save({validateBeforeSave: false})
 
-    const resetUrl = `${req.protocol}://localhost:5173/reset-password/${resetToken}`
+    const resetUrl = `https://eduhub-client.onrender.com/reset-password/${resetToken}`
 
     const message = `We have received a password reset request. Please use the below link to reset the password.\n\n${resetUrl}\n\nThis reset password link is valid only for 10 minutes.`
     try {

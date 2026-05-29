@@ -14,7 +14,7 @@ const server = createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: '*',
+        origin: 'https://eduhub-client.onrender.com',
         methods: ['POST', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
         transports: ['websocket'],
         credentials: true

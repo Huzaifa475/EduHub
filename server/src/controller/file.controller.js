@@ -4,6 +4,7 @@ import apiResponse from "../util/apiResponse.js";
 import {deleteFromGoogleCloud, uploadOnGoogleCloud} from "../util/googleCloud.js";
 import {File} from "../model/file.model.js";
 import { isValidObjectId } from "mongoose";
+import { deleteFileFromCloudinary, uploadOnCloudinary } from "../util/cloudinary.js";
 
 const uploadFile = asyncHandler(async(req, res) => {
 
@@ -14,16 +15,17 @@ const uploadFile = asyncHandler(async(req, res) => {
         throw new apiError(402, "Please provide the file")
     }
 
-    const result = await uploadOnGoogleCloud(filePath, req.file.originalname);
+    const result = await uploadOnCloudinary(filePath)
 
     if(!result){
         throw new apiError(501, 'Server error while uploading the file')
     }
 
     const file = await File.create({
-        fileName: result[0].metadata.name,
-        fileType: result[0].metadata.contentType,
-        fileUrl: result[0].metadata.mediaLink,
+        fileName: result.original_filename,
+        fileType: result.resource_type,
+        fileUrl: result.secure_url,
+        publicId: result.public_id,
         uploader: req.user?._id,
         room: roomId
     })
@@ -75,9 +77,19 @@ const deleteAFile = asyncHandler(async(req, res) => {
         throw new apiError(404, "File not found")
     }
 
-    const file = await File.findByIdAndDelete(fileId)
+    const file = await File.findById(fileId)
 
-    const result = await deleteFromGoogleCloud(file.fileName)
+    if(!file){
+        throw new apiError(500, "Unable to fetch the file")
+    }
+
+    const result = await deleteFileFromCloudinary(file.publicId, file.fileType)
+
+    if(!result){
+        throw new apiError(503, "Server error while deleting the file")
+    }
+
+    await File.findByIdAndDelete(fileId)
 
     return res
     .status(200)

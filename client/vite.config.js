@@ -7,6 +7,7 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'https://eduhub-aj7z.onrender.com/api',
+        // target: 'http://localhost:3000/api',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api/, '')
       }
